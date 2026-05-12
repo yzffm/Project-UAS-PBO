@@ -1,0 +1,131 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, Transition } from '@headlessui/react';
+import { 
+  Bars3Icon, 
+  XMarkIcon, 
+  UserCircleIcon,
+  MapIcon,
+  Squares2X2Icon
+} from '@heroicons/react/24/outline';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  // Helper untuk mengecek path aktif
+  const isActive = (path) => location.pathname === path;
+
+  // Mock status login (nanti dihubungkan ke AuthContext oleh Anggota 6)
+  const [isLoggedIn] = useState(true); 
+
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: Squares2X2Icon },
+    { name: 'Destinations', href: '/destinations', icon: MapIcon },
+  ];
+
+  return (
+    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo & Desktop Nav */}
+          <div className="flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center gap-2">
+              <div className="bg-blue-600 p-1.5 rounded-lg">
+                <MapIcon className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                TripPlan.io
+              </span>
+            </Link>
+            
+            <div className="hidden sm:ml-8 sm:flex sm:space-x-4">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive(item.href)
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-500 hover:text-blue-600 hover:bg-gray-50'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Side: Auth / Profile */}
+          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+            {isLoggedIn ? (
+              <Menu as="div" className="ml-3 relative">
+                <Menu.Button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  <UserCircleIcon className="h-8 w-8 text-gray-400 hover:text-blue-600 transition-colors" />
+                </Menu.Button>
+                <Transition
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Item>
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profil Saya</Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <button className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Keluar</button>
+                    </Menu.Item>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="text-sm font-medium text-gray-500 hover:text-blue-600">Masuk</Link>
+                <Link to="/register" className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 shadow-md shadow-blue-100">Daftar</Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex items-center sm:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-blue-600 hover:bg-gray-50 focus:outline-none"
+            >
+              {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`${isOpen ? 'block' : 'hidden'} sm:hidden bg-white border-t border-gray-50`}>
+        <div className="pt-2 pb-3 space-y-1 px-4">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium ${
+                isActive(item.href) ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:bg-gray-50'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              <item.icon className="h-5 w-5" />
+              {item.name}
+            </Link>
+          ))}
+          <div className="border-t border-gray-100 my-2 pt-2">
+            <button className="flex w-full items-center gap-3 px-3 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50">
+              Keluar
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
