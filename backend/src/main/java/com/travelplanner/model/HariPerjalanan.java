@@ -24,6 +24,8 @@ public class HariPerjalanan {
     @Min(value = 1, message = "Hari ke- minimal 1")
     private Integer hariKe;
 
+    private Integer urutanHari;
+
     @NotNull(message = "Tanggal wajib diisi")
     private LocalDate tanggal;
 
@@ -56,6 +58,14 @@ public class HariPerjalanan {
 
     public void setHariKe(Integer hariKe) {
         this.hariKe = hariKe;
+    }
+
+    public Integer getUrutanHari() {
+        return urutanHari;
+    }
+
+    public void setUrutanHari(Integer urutanHari) {
+        this.urutanHari = urutanHari;
     }
 
     public LocalDate getTanggal() {
