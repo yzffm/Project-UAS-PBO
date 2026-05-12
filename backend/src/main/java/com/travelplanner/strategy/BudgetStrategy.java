@@ -1,82 +1,22 @@
 package com.travelplanner.strategy;
 
 import com.travelplanner.model.base.AnggaranItem;
+
 import java.util.List;
+import java.util.Map;
 
+/**
+ * STRATEGY PATTERN: Interface for budget calculation algorithms.
+ * Each trip type gets a different strategy with different buffer calculations.
+ */
 public interface BudgetStrategy {
+    Double hitungTotalEstimasi(List<AnggaranItem> items);
+    Double hitungTotalAktual(List<AnggaranItem> items);
+    Map<String, Double> hitungPerKategori(List<AnggaranItem> items);
 
-    Double hitungTotal(List<AnggaranItem> items);
-}
-
-class SoloBudgetStrategy implements BudgetStrategy {
-
-    @Override
-    public Double hitungTotal(List<AnggaranItem> items) {
-
-        double total = 0.0;
-
-        for (AnggaranItem item : items) {
-
-            if (item.getHargaAktual() != null) {
-                total += item.getHargaAktual();
-            }
-
-        }
-
-        return total;
-    }
-}
-
-class GroupBudgetStrategy implements BudgetStrategy {
-
-    private int jumlahAnggota;
-
-    public GroupBudgetStrategy(int jumlahAnggota) {
-        this.jumlahAnggota = jumlahAnggota;
-    }
-
-    @Override
-    public Double hitungTotal(List<AnggaranItem> items) {
-
-        double total = 0.0;
-
-        for (AnggaranItem item : items) {
-
-            if (item.getHargaAktual() != null) {
-                total += item.getHargaAktual();
-            }
-
-        }
-
-        if (jumlahAnggota <= 0) {
-            return total;
-        }
-
-        return total / jumlahAnggota;
-    }
-}
-
-class FamilyBudgetStrategy implements BudgetStrategy {
-
-    private double tambahanBiayaKeluarga;
-
-    public FamilyBudgetStrategy(double tambahanBiayaKeluarga) {
-        this.tambahanBiayaKeluarga = tambahanBiayaKeluarga;
-    }
-
-    @Override
-    public Double hitungTotal(List<AnggaranItem> items) {
-
-        double total = 0.0;
-
-        for (AnggaranItem item : items) {
-
-            if (item.getHargaAktual() != null) {
-                total += item.getHargaAktual();
-            }
-
-        }
-
-        return total + tambahanBiayaKeluarga;
-    }
+    /**
+     * Calculates recommended budget based on a base total.
+     * Each strategy applies its own buffer/multiplier.
+     */
+    double calculateRecommendedBudget(double baseTotal);
 }
