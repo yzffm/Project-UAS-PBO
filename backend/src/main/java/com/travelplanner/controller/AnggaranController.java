@@ -1,53 +1,63 @@
 package com.travelplanner.controller;
 
+import com.travelplanner.dto.request.AnggaranRequestDTO;
+import com.travelplanner.dto.response.BudgetSummaryResponse;
+import com.travelplanner.factory.AnggaranFactory;
 import com.travelplanner.model.base.AnggaranItem;
 import com.travelplanner.service.AnggaranService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/anggaran")
+@RequestMapping("/api/trips/{tripId}/budget")
 @CrossOrigin("*")
 public class AnggaranController {
 
-    @Autowired
-    private AnggaranService anggaranService;
+    private final AnggaranService anggaranService;
 
-    @GetMapping
-    public List<AnggaranItem> getAllAnggaran() {
-        return anggaranService.getAllAnggaran();
+    // SOLID: Constructor Injection
+    public AnggaranController(AnggaranService anggaranService) {
+        this.anggaranService = anggaranService;
     }
 
-    @GetMapping("/{id}")
-    public AnggaranItem getAnggaranById(@PathVariable Long id) {
-        return anggaranService.getAnggaranById(id);
+    @GetMapping
+    public ResponseEntity<List<AnggaranItem>> getAllBudgetItems(@PathVariable Long tripId) {
+        return ResponseEntity.ok(anggaranService.getAnggaranByTripId(tripId));
     }
 
     @PostMapping
-    public AnggaranItem createAnggaran(@RequestBody AnggaranItem anggaranItem) {
-        return anggaranService.saveAnggaran(anggaranItem);
+    public ResponseEntity<AnggaranItem> addBudgetItem(
+            @PathVariable Long tripId,
+            @RequestBody AnggaranRequestDTO dto) {
+        // Assume factory logic is partly handled in service, but we can do it here too if needed.
+        // Actually, the factory needs the category from the DTO (assuming DTO has kategoriAnggaran or we pass it).
+        // Let's rely on the service to handle the factory if possible, but AnggaranFactory needs it.
+        // Let's pass the DTO to a service method that uses the factory.
+        return ResponseEntity.ok(anggaranService.createAnggaran(tripId, dto));
     }
 
-    @PutMapping("/{id}")
-    public AnggaranItem updateAnggaran(
-            @PathVariable Long id,
+    @PutMapping("/{itemId}")
+    public ResponseEntity<AnggaranItem> updateBudgetItem(
+            @PathVariable Long tripId,
+            @PathVariable Long itemId,
             @RequestBody AnggaranItem anggaranItem) {
-
-        return anggaranService.updateAnggaran(id, anggaranItem);
+        return ResponseEntity.ok(anggaranService.updateAnggaran(itemId, anggaranItem));
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteAnggaran(@PathVariable Long id) {
-
-        anggaranService.deleteAnggaran(id);
-
-        return "Data anggaran berhasil dihapus";
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> deleteBudgetItem(
+            @PathVariable Long tripId,
+            @PathVariable Long itemId) {
+        anggaranService.deleteAnggaran(itemId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/summary")
-    public Double getTotalAnggaran() {
-        return anggaranService.hitungTotalAnggaran();
+    public ResponseEntity<BudgetSummaryResponse> getBudgetSummary(
+            @PathVariable Long tripId,
+            @RequestParam(defaultValue = "SOLO") String tipePerjalanan) {
+        return ResponseEntity.ok(anggaranService.getBudgetSummary(tripId, tipePerjalanan));
     }
 }

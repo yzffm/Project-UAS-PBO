@@ -1,42 +1,37 @@
 import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { formatCurrency } from '../../utils/formatCurrency';
 
-// Registrasi komponen Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-/**
- * Komponen BudgetSummaryChart
- * @param {Object} dataSummary - Data ringkasan dari backend (format: { Kategori: Total })
- */
-const BudgetSummaryChart = ({ dataSummary = {} }) => {
-  
-  // Menyiapkan label (Kategori) dan data (Total Biaya)
-  const labels = Object.keys(dataSummary);
-  const values = Object.values(dataSummary);
+const BudgetSummaryChart = ({ summary }) => {
+  const perKategori = summary?.perKategori || {};
+
+  const categories = Object.keys(perKategori);
+  const labels = categories.map(cat => `${perKategori[cat].icon || ''} ${cat}`);
+  const estimasiValues = categories.map(cat => perKategori[cat].estimasi || 0);
 
   const chartData = {
     labels: labels,
     datasets: [
       {
-        label: 'Total Pengeluaran',
-        data: values,
+        label: 'Total Estimasi',
+        data: estimasiValues,
         backgroundColor: [
-          'rgba(54, 162, 235, 0.7)',  // Biru (Transportasi)
-          'rgba(153, 102, 255, 0.7)', // Ungu (Akomodasi)
-          'rgba(255, 159, 64, 0.7)',  // Oranye (Makan/Lainnya)
-          'rgba(255, 99, 132, 0.7)',  // Merah
-          'rgba(75, 192, 192, 0.7)',  // Hijau
+          'rgba(54, 162, 235, 0.8)',  // Transportasi (Blue)
+          'rgba(153, 102, 255, 0.8)', // Akomodasi (Purple)
+          'rgba(75, 192, 192, 0.8)',  // Konsumsi (Green)
+          'rgba(255, 159, 64, 0.8)',  // Lainnya (Orange)
         ],
         borderColor: [
           'rgba(54, 162, 235, 1)',
           'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 99, 132, 1)',
           'rgba(75, 192, 192, 1)',
+          'rgba(255, 159, 64, 1)',
         ],
         borderWidth: 2,
-        hoverOffset: 10,
+        hoverOffset: 8,
       },
     ],
   };
@@ -53,22 +48,19 @@ const BudgetSummaryChart = ({ dataSummary = {} }) => {
           font: {
             size: 12,
             family: "'Inter', sans-serif",
+            weight: 'bold'
           }
         }
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             let label = context.label || '';
             if (label) {
               label += ': ';
             }
             if (context.parsed !== null) {
-              label += new Intl.NumberFormat('id-ID', { 
-                style: 'currency', 
-                currency: 'IDR',
-                maximumFractionDigits: 0 
-              }).format(context.parsed);
+              label += formatCurrency(context.parsed);
             }
             return label;
           }
@@ -78,32 +70,32 @@ const BudgetSummaryChart = ({ dataSummary = {} }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-      <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
-        Proporsi Anggaran
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
+      <h3 className="text-lg font-bold text-gray-900 mb-6 text-center w-full border-b pb-2">
+        Proporsi Estimasi Anggaran
       </h3>
-      
-      <div className="h-64 w-full">
-        {values.length > 0 ? (
+
+      <div className="h-64 w-full relative">
+        {estimasiValues.some(v => v > 0) ? (
           <Doughnut data={chartData} options={options} />
         ) : (
-          <div className="h-full flex items-center justify-center border-2 border-dashed border-gray-100 rounded-lg">
-            <p className="text-gray-400 text-sm">Data belum tersedia</p>
+          <div className="absolute inset-0 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <p className="text-gray-400 font-medium">Belum ada data anggaran</p>
           </div>
         )}
       </div>
 
-      <div className="mt-6 space-y-2">
-        {labels.map((label, index) => (
-          <div key={index} className="flex justify-between text-sm">
-            <span className="text-gray-500">{label}</span>
-            <span className="font-semibold text-gray-700">
-              {new Intl.NumberFormat('id-ID', { 
-                style: 'currency', 
-                currency: 'IDR',
-                maximumFractionDigits: 0 
-              }).format(values[index])}
+      <div className="mt-8 w-full space-y-3">
+        {categories.map((cat, index) => (
+          <div key={index} className="flex justify-between text-sm items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+            <span className="text-gray-600 font-bold flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: chartData.datasets[0].borderColor[index] }}></span>
+              {labels[index]}
             </span>
+            <div className="text-right">
+              <p className="font-bold text-gray-900">{formatCurrency(perKategori[cat].estimasi)}</p>
+              <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Aktual: {formatCurrency(perKategori[cat].aktual)}</p>
+            </div>
           </div>
         ))}
       </div>

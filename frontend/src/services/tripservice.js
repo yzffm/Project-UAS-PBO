@@ -1,66 +1,58 @@
-// src/services/tripService.js
-import api from './api';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const getHeaders = (token) => ({
+  headers: { Authorization: `Bearer ${token}` }
+});
 
 const tripService = {
-  /**
-   * Mengambil semua daftar trip milik user yang sedang login
-   */
-  getAllTrips: async () => {
+  getAllTrips: async (token) => {
     try {
-      const response = await api.get('/trips');
+      const response = await axios.get(`${API_URL}/trips`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal mengambil daftar perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to fetch trips';
     }
   },
-
-  /**
-   * Mengambil detail lengkap satu trip (termasuk hari & itinerary)
-   * @param {string|number} id - ID Trip
-   */
-  getTripById: async (id) => {
+  getTripById: async (id, token) => {
     try {
-      const response = await api.get(`/trips/${id}`);
+      const response = await axios.get(`${API_URL}/trips/${id}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Detail perjalanan tidak ditemukan';
+      throw error.response?.data?.message || error.message || 'Failed to fetch trip details';
     }
   },
-
-  /**
-   * Membuat trip baru (Menggunakan PerjalananFactory di Backend)
-   * @param {Object} tripData - { nama, lokasi, tanggalMulai, tipeTrip, ... }
-   */
-  createTrip: async (tripData) => {
+  createTrip: async (data, token) => {
     try {
-      const response = await api.post('/trips', tripData);
+      const response = await axios.post(`${API_URL}/trips`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal membuat rencana perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to create trip';
     }
   },
-
-  /**
-   * Memperbarui informasi dasar trip
-   */
-  updateTrip: async (id, tripData) => {
+  updateTrip: async (id, data, token) => {
     try {
-      const response = await api.put(`/trips/${id}`, tripData);
+      const response = await axios.put(`${API_URL}/trips/${id}`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal memperbarui perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to update trip';
     }
   },
-
-  /**
-   * Menghapus trip
-   */
-  deleteTrip: async (id) => {
+  deleteTrip: async (id, token) => {
     try {
-      const response = await api.delete(`/trips/${id}`);
+      const response = await axios.delete(`${API_URL}/trips/${id}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menghapus perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to delete trip';
+    }
+  },
+  getTripSummary: async (id, token) => {
+    try {
+      const response = await axios.get(`${API_URL}/trips/${id}/summary`, getHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.message || error.message || 'Failed to fetch trip summary';
     }
   }
 };

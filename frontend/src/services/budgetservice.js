@@ -1,69 +1,50 @@
-// src/services/budgetService.js
-import api from './api';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const getHeaders = (token) => ({
+  headers: { Authorization: `Bearer ${token}` }
+});
 
 const budgetService = {
-  /**
-   * Mengambil semua item anggaran untuk satu trip tertentu
-   * Digunakan untuk mengisi BudgetTable
-   */
-  getBudgetItems: async (tripId) => {
+  getBudgetItems: async (tripId, token) => {
     try {
-      const response = await api.get(`/budget/trips/${tripId}`);
+      const response = await axios.get(`${API_URL}/trips/${tripId}/budget`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal mengambil daftar anggaran';
+      throw error.response?.data?.message || error.message || 'Failed to fetch budget items';
     }
   },
-
-  /**
-   * Mengambil ringkasan anggaran berdasarkan kategori (Strategy Pattern result)
-   * Digunakan untuk mengisi BudgetSummaryChart
-   */
-  getBudgetSummary: async (tripId) => {
+  addBudgetItem: async (tripId, data, token) => {
     try {
-      const response = await api.get(`/budget/summary/${tripId}`);
-      return response.data; // Output berupa objek: { "Transportasi": 5000, "Makan": 2000, ... }
-    } catch (error) {
-      throw error.response?.data?.message || 'Gagal mengambil ringkasan anggaran';
-    }
-  },
-
-  /**
-   * Menambahkan item anggaran baru
-   * Backend akan menggunakan AnggaranFactory untuk menentukan subclass (Akomodasi, Transport, dll)
-   * @param {number} tripId 
-   * @param {Object} budgetData - { nama, kategori, biaya }
-   */
-  addBudgetItem: async (tripId, budgetData) => {
-    try {
-      const response = await api.post(`/budget/trips/${tripId}`, budgetData);
+      const response = await axios.post(`${API_URL}/trips/${tripId}/budget`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menambahkan item anggaran';
+      throw error.response?.data?.message || error.message || 'Failed to add budget item';
     }
   },
-
-  /**
-   * Menghapus item anggaran
-   */
-  deleteBudgetItem: async (itemId) => {
+  updateBudgetItem: async (tripId, itemId, data, token) => {
     try {
-      const response = await api.delete(`/budget/items/${itemId}`);
+      const response = await axios.put(`${API_URL}/trips/${tripId}/budget/${itemId}`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menghapus item anggaran';
+      throw error.response?.data?.message || error.message || 'Failed to update budget item';
     }
   },
-
-  /**
-   * Memperbarui item anggaran
-   */
-  updateBudgetItem: async (itemId, budgetData) => {
+  deleteBudgetItem: async (tripId, itemId, token) => {
     try {
-      const response = await api.put(`/budget/items/${itemId}`, budgetData);
+      const response = await axios.delete(`${API_URL}/trips/${tripId}/budget/${itemId}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal memperbarui item anggaran';
+      throw error.response?.data?.message || error.message || 'Failed to delete budget item';
+    }
+  },
+  getBudgetSummary: async (tripId, token) => {
+    try {
+      const response = await axios.get(`${API_URL}/trips/${tripId}/budget/summary`, getHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.message || error.message || 'Failed to fetch budget summary';
     }
   }
 };

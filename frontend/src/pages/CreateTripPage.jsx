@@ -1,51 +1,133 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import TripTypeSelector from '../components/trip/TripTypeSelector';
+import tripService from '../services/tripService';
+import { useAuth } from '../context/AuthContext';
 
 const CreateTripPage = () => {
-  const [tipe, setTipe] = useState('SOLO');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [formData, setFormData] = useState({
+    namaTrip: location.state?.destinationName ? `Trip ke ${location.state.destinationName}` : '',
+    deskripsiTrip: '',
+    tanggalMulai: '',
+    tanggalSelesai: '',
+    tipePerjalanan: 'SOLO',
+
+    // Solo specific
+    moodPerjalanan: '',
+    modeHemat: false,
+
+    // Grup specific
+    jumlahPeserta: 2,
+    namaGrup: '',
+    temaGrup: '',
+
+    // Keluarga specific
+    jumlahDewasa: 1,
+    jumlahAnak: 0,
+    adaLansia: false,
+    adaBalita: false
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const dataToSubmit = { ...formData };
+
+      // Bersihkan data yang tidak sesuai tipe
+      if (formData.tipePerjalanan === 'SOLO') {
+        delete dataToSubmit.jumlahPeserta;
+        delete dataToSubmit.namaGrup;
+        delete dataToSubmit.temaGrup;
+        delete dataToSubmit.jumlahDewasa;
+        delete dataToSubmit.jumlahAnak;
+        delete dataToSubmit.adaLansia;
+        delete dataToSubmit.adaBalita;
+      } else if (formData.tipePerjalanan === 'GRUP') {
+        delete dataToSubmit.moodPerjalanan;
+        delete dataToSubmit.modeHemat;
+        delete dataToSubmit.jumlahDewasa;
+        delete dataToSubmit.jumlahAnak;
+        delete dataToSubmit.adaLansia;
+        delete dataToSubmit.adaBalita;
+      } else {
+        delete dataToSubmit.moodPerjalanan;
+        delete dataToSubmit.modeHemat;
+        delete dataToSubmit.jumlahPeserta;
+        delete dataToSubmit.namaGrup;
+        delete dataToSubmit.temaGrup;
+      }
+
+      const trip = await tripService.createTrip(dataToSubmit, token);
+      navigate(`/trips/${trip.id}`);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-2xl mx-auto px-6 py-16">
-        <button onClick={() => navigate(-1)} className="text-gray-500 mb-6 hover:text-gray-800">← Kembali</button>
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Buat Rencana Baru</h1>
-        
-        <form className="space-y-8">
+    <div className="max-w-3xl mx-auto px-6 py-10">
+      <button onClick={() => navigate('/dashboard')} className="text-gray-500 mb-6 hover:text-blue-600 transition flex items-center gap-2 font-medium">
+        ← Kembali ke Dashboard
+      </button>
+
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Buat Rencana Baru</h1>
+        <p className="text-gray-500 mb-8">Lengkapi detail di bawah untuk memulai perencanaan petualangan Anda.</p>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-8">
           <section className="space-y-4">
-            <label className="block text-lg font-bold text-gray-800">Detail Perjalanan</label>
-            <input type="text" placeholder="Nama Perjalanan (Contoh: Liburan Musim Panas)" 
-              className="w-full border-b-2 border-gray-100 py-3 text-xl outline-none focus:border-blue-500 transition" />
-            <div className="grid grid-cols-2 gap-4">
-              <input type="date" className="w-full border p-3 rounded-xl text-gray-600 outline-none" />
-              <input type="text" placeholder="Kota Tujuan" className="w-full border p-3 rounded-xl outline-none" />
+            <label className="block text-lg font-bold text-gray-800 border-b border-gray-100 pb-2">Informasi Dasar</label>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Perjalanan *</label>
+              <input type="text" required value={formData.namaTrip} onChange={(e) => setFormData({ ...formData, namaTrip: e.target.value })}
+                placeholder="Contoh: Liburan Musim Panas di Bali"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Tanggal Mulai *</label>
+                <input type="date" required value={formData.tanggalMulai} onChange={(e) => setFormData({ ...formData, tanggalMulai: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-700" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Tanggal Selesai *</label>
+                <input type="date" required value={formData.tanggalSelesai} onChange={(e) => setFormData({ ...formData, tanggalSelesai: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-700" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat</label>
+              <textarea rows="3" value={formData.deskripsiTrip} onChange={(e) => setFormData({ ...formData, deskripsiTrip: e.target.value })}
+                placeholder="Tujuan, harapan, atau catatan untuk trip ini..."
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition resize-none"></textarea>
             </div>
           </section>
 
-          <section className="space-y-4">
-            <label className="block text-lg font-bold text-gray-800">Tipe Traveler</label>
-            <div className="flex gap-4">
-              {['SOLO', 'GRUP', 'KELUARGA'].map((t) => (
-                <button key={t} type="button" onClick={() => setTipe(t)}
-                  className={`flex-1 py-3 rounded-xl border-2 font-bold transition ${tipe === t ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-100 text-gray-400'}`}>
-                  {t}
-                </button>
-              ))}
-            </div>
+          <section className="space-y-4 pt-4 border-t border-gray-100">
+            <TripTypeSelector formData={formData} setFormData={setFormData} />
           </section>
 
-          {/* Conditional Input */}
-          {tipe !== 'SOLO' && (
-            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                {tipe === 'GRUP' ? 'Nama Grup / Geng' : 'Nama Keluarga'}
-              </label>
-              <input type="text" className="w-full border p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama..." />
-            </div>
-          )}
-
-          <button type="submit" className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition">
-            Lanjutkan ke Itinerary →
+          <button type="submit" disabled={isLoading} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200 disabled:opacity-70 mt-8">
+            {isLoading ? 'Menyimpan...' : 'Buat Rencana Perjalanan →'}
           </button>
         </form>
       </div>

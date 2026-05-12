@@ -1,69 +1,50 @@
-// src/services/itineraryService.js
-import api from './api';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const getHeaders = (token) => ({
+  headers: { Authorization: `Bearer ${token}` }
+});
 
 const itineraryService = {
-  /**
-   * Menambahkan hari baru ke dalam rencana perjalanan
-   * @param {number} tripId - ID dari Trip yang ingin ditambah harinya
-   * @param {Object} dayData - { urutanHari, tanggal }
-   */
-  addDayToTrip: async (tripId, dayData) => {
+  getDays: async (tripId, token) => {
     try {
-      const response = await api.post(`/trips/${tripId}/days`, dayData);
+      const response = await axios.get(`${API_URL}/trips/${tripId}/days`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menambah hari perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to fetch itinerary days';
     }
   },
-
-  /**
-   * Menambahkan jadwal destinasi ke dalam hari tertentu
-   * @param {number} dayId - ID dari HariPerjalanan
-   * @param {Object} scheduleData - { destinasiId, jamMulai, jamSelesai, catatan }
-   */
-  addScheduleItem: async (dayId, scheduleData) => {
+  addDay: async (tripId, data, token) => {
     try {
-      const response = await api.post(`/itinerary/days/${dayId}/activities`, scheduleData);
+      const response = await axios.post(`${API_URL}/trips/${tripId}/days`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menambah jadwal destinasi';
+      throw error.response?.data?.message || error.message || 'Failed to add day';
     }
   },
-
-  /**
-   * Menghapus item jadwal tertentu
-   * @param {number} scheduleId 
-   */
-  deleteScheduleItem: async (scheduleId) => {
+  deleteDay: async (tripId, dayId, token) => {
     try {
-      const response = await api.delete(`/itinerary/activities/${scheduleId}`);
+      const response = await axios.delete(`${API_URL}/trips/${tripId}/days/${dayId}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal menghapus jadwal';
+      throw error.response?.data?.message || error.message || 'Failed to delete day';
     }
   },
-
-  /**
-   * Memperbarui detail jadwal (misal ganti jam atau catatan)
-   */
-  updateScheduleItem: async (scheduleId, updateData) => {
+  addSchedule: async (tripId, dayId, data, token) => {
     try {
-      const response = await api.put(`/itinerary/activities/${scheduleId}`, updateData);
+      const response = await axios.post(`${API_URL}/trips/${tripId}/days/${dayId}/schedule`, data, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal memperbarui jadwal';
+      throw error.response?.data?.message || error.message || 'Failed to add schedule';
     }
   },
-
-  /**
-   * Mengambil urutan hari untuk satu trip tertentu
-   */
-  getDaysByTripId: async (tripId) => {
+  deleteSchedule: async (tripId, dayId, schedId, token) => {
     try {
-      const response = await api.get(`/trips/${tripId}/days`);
+      const response = await axios.delete(`${API_URL}/trips/${tripId}/days/${dayId}/schedule/${schedId}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal mengambil data hari perjalanan';
+      throw error.response?.data?.message || error.message || 'Failed to delete schedule';
     }
   }
 };

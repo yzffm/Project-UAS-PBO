@@ -50,6 +50,13 @@ public class AnggaranService {
         return anggaranRepository.save(anggaranItem);
     }
 
+    public AnggaranItem createAnggaran(Long tripId, AnggaranRequestDTO dto) {
+        Perjalanan perjalanan = perjalananService.getTripById(tripId);
+        AnggaranItem item = AnggaranFactory.create(dto.getKategori(), dto);
+        item.setPerjalanan(perjalanan);
+        return anggaranRepository.save(item);
+    }
+
     public AnggaranItem updateAnggaran(Long id, AnggaranItem updatedItem) {
         AnggaranItem existing = getAnggaranById(id);
         existing.setNamaItem(updatedItem.getNamaItem());

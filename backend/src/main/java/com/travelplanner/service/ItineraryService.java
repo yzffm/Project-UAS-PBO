@@ -51,6 +51,24 @@ public class ItineraryService {
         return hariPerjalananRepository.save(hari);
     }
 
+    @Transactional
+    public HariPerjalanan updateDay(Long dayId, LocalDate tanggal, Integer urutanHari, String catatan) {
+        HariPerjalanan hari = hariPerjalananRepository.findById(dayId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hari perjalanan tidak ditemukan"));
+        if (tanggal != null) hari.setTanggal(tanggal);
+        if (urutanHari != null) hari.setUrutanHari(urutanHari);
+        if (catatan != null) hari.setCatatan(catatan);
+        return hariPerjalananRepository.save(hari);
+    }
+
+    @Transactional
+    public void deleteDay(Long dayId) {
+        if (!hariPerjalananRepository.existsById(dayId)) {
+            throw new ResourceNotFoundException("Hari perjalanan tidak ditemukan");
+        }
+        hariPerjalananRepository.deleteById(dayId);
+    }
+
     // UPDATE: Tambah parameter "urutan" dan sesuaikan setter waktu
     @Transactional
     public JadwalDestinasi addSchedule(Long dayId, Long destinasiId, Integer urutan, LocalTime mulai, LocalTime selesai, String catatan) {

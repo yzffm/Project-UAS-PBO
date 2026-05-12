@@ -1,56 +1,41 @@
-// src/services/destinationService.js
-import api from './api';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const getHeaders = (token) => ({
+  headers: { Authorization: `Bearer ${token}` }
+});
 
 const destinationService = {
-  /**
-   * Mengambil semua daftar destinasi yang tersedia di sistem
-   * Digunakan untuk halaman katalog eksplorasi
-   */
-  getAllDestinations: async () => {
+  getAllDestinations: async (filters, token) => {
     try {
-      const response = await api.get('/destinations');
+      let queryStr = '';
+      if (filters) {
+        const params = new URLSearchParams();
+        if (filters.tipe) params.append('tipe', filters.tipe);
+        if (filters.lokasi) params.append('lokasi', filters.lokasi);
+        queryStr = `?${params.toString()}`;
+      }
+      const response = await axios.get(`${API_URL}/destinasi${queryStr}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Gagal mengambil data destinasi';
+      throw error.response?.data?.message || error.message || 'Failed to fetch destinations';
     }
   },
-
-  /**
-   * Mencari destinasi berdasarkan nama atau kategori
-   * @param {string} query - Keyword pencarian
-   */
-  searchDestinations: async (query) => {
+  getDestinationById: async (id, token) => {
     try {
-      const response = await api.get(`/destinations/search?q=${query}`);
+      const response = await axios.get(`${API_URL}/destinasi/${id}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Pencarian gagal';
+      throw error.response?.data?.message || error.message || 'Failed to fetch destination details';
     }
   },
-
-  /**
-   * Mengambil detail satu destinasi secara spesifik
-   * @param {number} id - ID Destinasi
-   */
-  getDestinationById: async (id) => {
+  searchDestinations: async (query, token) => {
     try {
-      const response = await api.get(`/destinations/${id}`);
+      const response = await axios.get(`${API_URL}/destinasi/search?q=${query}`, getHeaders(token));
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Detail destinasi tidak ditemukan';
-    }
-  },
-
-  /**
-   * Filter destinasi berdasarkan kategori (Alam, Budaya, Kuliner, dll)
-   * @param {string} category 
-   */
-  getDestinationsByCategory: async (category) => {
-    try {
-      const response = await api.get(`/destinations/category/${category}`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Gagal memfilter destinasi';
+      throw error.response?.data?.message || error.message || 'Failed to search destinations';
     }
   }
 };

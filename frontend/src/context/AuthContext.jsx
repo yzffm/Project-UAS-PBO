@@ -5,24 +5,27 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Cek session saat pertama kali app di-load
     const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const storedToken = localStorage.getItem('token');
 
-    if (storedUser && token) {
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
     setLoading(false);
   }, []);
 
-  const login = (userData, token) => {
-    localStorage.setItem('token', token);
+  const login = (userData, userToken) => {
+    localStorage.setItem('token', userToken);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
+    setToken(userToken);
     navigate('/dashboard');
   };
 
@@ -30,11 +33,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
+    setToken(null);
     navigate('/login');
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, loading, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, setUser, token, login, logout, loading, isAuthenticated: !!token }}>
       {!loading && children}
     </AuthContext.Provider>
   );

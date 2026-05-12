@@ -62,7 +62,7 @@ const TripCard = ({ trip }) => {
 
         {/* Action Button */}
         <Link 
-          to={`/trip/${id}`}
+          to={`/trips/${id}`}
           className="mt-4 w-full flex items-center justify-center gap-2 bg-gray-50 group-hover:bg-blue-600 group-hover:text-white text-gray-600 py-3 rounded-xl font-bold text-sm transition-all"
         >
           Lihat Detail Rencana

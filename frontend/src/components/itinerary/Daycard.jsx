@@ -1,69 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ScheduleItem from './ScheduleItem';
-import { PlusIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import AddDestinationModal from './AddDestinationModal';
+import { Plus, Calendar, Trash2 } from 'lucide-react';
+import itineraryService from '../../services/itineraryService';
+import { useAuth } from '../../context/AuthContext';
 
-/**
- * Komponen DayCard
- * @param {number} dayNumber - Urutan hari (1, 2, dst)
- * @param {string} date - Tanggal spesifik (opsional)
- * @param {Array} schedules - Array berisi objek jadwal destinasi
- * @param {Function} onAddActivity - Fungsi untuk membuka modal tambah destinasi
- */
-const DayCard = ({ dayNumber, date, schedules = [], onAddActivity }) => {
+const DayCard = ({ day, tripId, onUpdate }) => {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const { token } = useAuth();
+
+  const handleDeleteDay = async () => {
+    if (window.confirm(`Hapus Hari ${day.urutanHari}?`)) {
+      try {
+        await itineraryService.deleteDay(tripId, day.id, token);
+        onUpdate();
+      } catch (err) {
+        alert('Gagal menghapus hari');
+      }
+    }
+  };
+
+  const handleAddSchedule = async (scheduleData) => {
+    try {
+      await itineraryService.addSchedule(tripId, day.id, scheduleData, token);
+      setShowAddModal(false);
+      onUpdate();
+    } catch (err) {
+      alert('Gagal menambah jadwal');
+    }
+  };
+
+  const handleDeleteSchedule = async (scheduleId) => {
+    if (window.confirm('Hapus jadwal ini?')) {
+      try {
+        await itineraryService.deleteSchedule(tripId, day.id, scheduleId, token);
+        onUpdate();
+      } catch (err) {
+        alert('Gagal menghapus jadwal');
+      }
+    }
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden mb-8">
-      {/* Header Hari */}
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
       <div className="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="bg-blue-600 text-white p-2 rounded-lg">
-            <CalendarIcon className="h-5 w-5" />
+          <div className="bg-blue-600 text-white p-2.5 rounded-xl shadow-sm">
+            <Calendar className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-800 text-lg">Hari {dayNumber}</h3>
-            {date && <p className="text-sm text-gray-500">{date}</p>}
+            <h3 className="font-bold text-gray-900 text-lg">Hari {day.urutanHari}</h3>
+            {day.catatan && <p className="text-sm text-gray-500 font-medium">{day.catatan}</p>}
           </div>
         </div>
         
-        <button
-          onClick={() => onAddActivity(dayNumber)}
-          className="flex items-center space-x-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          <PlusIcon className="h-4 w-4" />
-          <span>Tambah Destinasi</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-white text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg border border-blue-200 transition-colors shadow-sm"
+          >
+            <Plus className="h-4 w-4" />
+            <span className="hidden sm:inline">Tambah Destinasi</span>
+          </button>
+          <button
+            onClick={handleDeleteDay}
+            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            title="Hapus Hari"
+          >
+            <Trash2 className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Daftar Jadwal (Schedule Items) */}
       <div className="p-6">
-        {schedules.length > 0 ? (
-          <div className="relative border-l-2 border-dashed border-blue-200 ml-3 space-y-6">
-            {schedules.map((item, index) => (
+        {day.listJadwal && day.listJadwal.length > 0 ? (
+          <div className="relative border-l-2 border-dashed border-blue-200 ml-4 space-y-6">
+            {day.listJadwal.map((item, index) => (
               <div key={item.id || index} className="relative pl-8">
-                {/* Dot Indikator pada Garis Timeline */}
-                <div className="absolute -left-[9px] top-1 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
-                
+                <div className="absolute -left-[11px] top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
                 <ScheduleItem 
-                  startTime={item.jamMulai}
-                  endTime={item.jamSelesai}
-                  destinationName={item.destinasi?.nama || 'Destinasi Tidak Diketahui'}
-                  category={item.destinasi?.kategori}
-                  note={item.catatan}
+                  item={item}
+                  onDelete={handleDeleteSchedule}
                 />
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-8">
-            <p className="text-gray-400 italic text-sm">Belum ada agenda untuk hari ini.</p>
+          <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+            <p className="text-gray-400 font-medium">Belum ada agenda untuk hari ini.</p>
             <button 
-              onClick={() => onAddActivity(dayNumber)}
-              className="mt-2 text-xs text-blue-500 underline"
+              onClick={() => setShowAddModal(true)}
+              className="mt-3 text-sm font-bold text-blue-600 hover:text-blue-800"
             >
-              Klik untuk menyusun jadwal
+              + Susun Jadwal
             </button>
           </div>
         )}
       </div>
+
+      {showAddModal && (
+        <AddDestinationModal 
+          isOpen={showAddModal} 
+          onClose={() => setShowAddModal(false)}
+          onAdd={handleAddSchedule}
+        />
+      )}
     </div>
   );
 };
