@@ -15,7 +15,7 @@ const DashboardPage = () => {
     const fetchTrips = async () => {
       try {
         const data = await tripService.getAllTrips(token);
-        setTrips(data || []);
+        setTrips(Array.isArray(data) ? data : data ? [data] : []);
       } catch (err) {
         setError(err);
       } finally {

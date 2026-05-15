@@ -47,6 +47,7 @@ public class ItineraryService {
         hari.setPerjalanan(perjalanan);
         hari.setTanggal(tanggal);
         hari.setUrutanHari(urutanHari);
+        hari.setHariKe(urutanHari);
 
         return hariPerjalananRepository.save(hari);
     }

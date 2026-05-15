@@ -53,7 +53,7 @@ const DayCard = ({ day, tripId, onUpdate }) => {
             {day.catatan && <p className="text-sm text-gray-500 font-medium">{day.catatan}</p>}
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowAddModal(true)}
@@ -73,12 +73,13 @@ const DayCard = ({ day, tripId, onUpdate }) => {
       </div>
 
       <div className="p-6">
-        {day.listJadwal && day.listJadwal.length > 0 ? (
+        {/* FIX: Mengubah listJadwal menjadi jadwalList sesuai API response */}
+        {day.jadwalList && day.jadwalList.length > 0 ? (
           <div className="relative border-l-2 border-dashed border-blue-200 ml-4 space-y-6">
-            {day.listJadwal.map((item, index) => (
+            {day.jadwalList.map((item, index) => (
               <div key={item.id || index} className="relative pl-8">
                 <div className="absolute -left-[11px] top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
-                <ScheduleItem 
+                <ScheduleItem
                   item={item}
                   onDelete={handleDeleteSchedule}
                 />
@@ -88,7 +89,7 @@ const DayCard = ({ day, tripId, onUpdate }) => {
         ) : (
           <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
             <p className="text-gray-400 font-medium">Belum ada agenda untuk hari ini.</p>
-            <button 
+            <button
               onClick={() => setShowAddModal(true)}
               className="mt-3 text-sm font-bold text-blue-600 hover:text-blue-800"
             >
@@ -99,8 +100,8 @@ const DayCard = ({ day, tripId, onUpdate }) => {
       </div>
 
       {showAddModal && (
-        <AddDestinationModal 
-          isOpen={showAddModal} 
+        <AddDestinationModal
+          isOpen={showAddModal}
           onClose={() => setShowAddModal(false)}
           onAdd={handleAddSchedule}
         />

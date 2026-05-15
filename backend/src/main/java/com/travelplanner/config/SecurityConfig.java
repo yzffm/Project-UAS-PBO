@@ -37,8 +37,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Request OPTIONS (Preflight) diizinkan lewat secara otomatis jika .cors()
-                        // aktif
+                        .requestMatchers("/api/destinasi/**").permitAll()
+                        .requestMatchers("/api/health").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

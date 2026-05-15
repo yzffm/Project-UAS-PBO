@@ -1,5 +1,6 @@
 package com.travelplanner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travelplanner.model.base.Perjalanan;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -9,10 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * HariPerjalanan — represents one day in a trip's itinerary.
- * Each trip can have multiple days, each day can have multiple scheduled destinations.
- */
 @Entity
 @Table(name = "hari_perjalanan")
 public class HariPerjalanan {
@@ -31,11 +28,13 @@ public class HariPerjalanan {
 
     private String catatan;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id")
     private Perjalanan perjalanan;
 
-    @OneToMany(mappedBy = "hariPerjalanan", cascade = CascadeType.ALL, orphanRemoval = true)
+    // FIX: Tambahkan fetch = FetchType.EAGER di sini
+    @OneToMany(mappedBy = "hariPerjalanan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("urutan ASC")
     private List<JadwalDestinasi> jadwalList = new ArrayList<>();
 

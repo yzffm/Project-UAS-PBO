@@ -61,9 +61,12 @@ public class ItineraryController {
             @PathVariable Long dayId,
             @RequestBody Map<String, Object> body) {
         Long destinasiId = Long.parseLong(body.get("destinasiId").toString());
-        Integer urutan = Integer.parseInt(body.get("urutan").toString());
-        LocalTime mulai = LocalTime.parse(body.get("waktuMulai").toString());
-        LocalTime selesai = LocalTime.parse(body.get("waktuSelesai").toString());
+        Integer urutan = body.containsKey("urutan") && body.get("urutan") != null
+                ? Integer.parseInt(body.get("urutan").toString()) : 1;
+        LocalTime mulai = body.containsKey("waktuMulai") && body.get("waktuMulai") != null
+                ? LocalTime.parse(body.get("waktuMulai").toString()) : null;
+        LocalTime selesai = body.containsKey("waktuSelesai") && body.get("waktuSelesai") != null
+                ? LocalTime.parse(body.get("waktuSelesai").toString()) : null;
         String catatan = body.containsKey("catatan") ? body.get("catatan").toString() : null;
         
         return ResponseEntity.ok(itineraryService.addSchedule(dayId, destinasiId, urutan, mulai, selesai, catatan));

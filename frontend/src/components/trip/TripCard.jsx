@@ -6,8 +6,8 @@ import { formatCurrency } from '../../utils/formatCurrency';
 import { formatDate } from '../../utils/formatDate';
 
 const TripCard = ({ trip }) => {
-  // Destructuring data trip dari backend
-  const { id, nama, tipe, tanggal, destinasiUtama, totalAnggaran, status } = trip;
+  // FIX: Destructuring data trip disesuaikan dengan PerjalananResponseDTO.java dari backend
+  const { id, namaTrip, tipePerjalanan, tanggalMulai, destinasiUtama, totalAnggaran, status } = trip;
 
   // Logika warna berdasarkan tipe trip (untuk aksen visual)
   const getTypeStyles = (type) => {
@@ -24,8 +24,8 @@ const TripCard = ({ trip }) => {
       <div className="p-6">
         {/* Header: Tipe & Status */}
         <div className="flex justify-between items-start mb-4">
-          <span className={`text-[10px] font-extrabold tracking-widest px-2.5 py-1 rounded-lg border ${getTypeStyles(tipe)}`}>
-            {tipe}
+          <span className={`text-[10px] font-extrabold tracking-widest px-2.5 py-1 rounded-lg border ${getTypeStyles(tipePerjalanan)}`}>
+            {tipePerjalanan}
           </span>
           <StatusBadge status={status || 'PLANNED'} />
         </div>
@@ -33,7 +33,7 @@ const TripCard = ({ trip }) => {
         {/* Title & Lokasi */}
         <div className="mb-6">
           <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-            {nama}
+            {namaTrip}
           </h3>
           <div className="flex items-center text-gray-500 text-sm gap-1.5">
             <MapPin size={14} className="text-gray-400" />
@@ -48,9 +48,9 @@ const TripCard = ({ trip }) => {
               <Calendar size={14} />
               <span className="text-[10px] font-bold uppercase tracking-wider">Waktu</span>
             </div>
-            <p className="text-sm font-semibold text-gray-700">{formatDate(tanggal)}</p>
+            <p className="text-sm font-semibold text-gray-700">{formatDate(tanggalMulai)}</p>
           </div>
-          
+
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-gray-400">
               <Wallet size={14} />
@@ -61,7 +61,7 @@ const TripCard = ({ trip }) => {
         </div>
 
         {/* Action Button */}
-        <Link 
+        <Link
           to={`/trips/${id}`}
           className="mt-4 w-full flex items-center justify-center gap-2 bg-gray-50 group-hover:bg-blue-600 group-hover:text-white text-gray-600 py-3 rounded-xl font-bold text-sm transition-all"
         >

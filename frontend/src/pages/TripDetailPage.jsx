@@ -77,7 +77,18 @@ const TripDetailPage = () => {
 
   const handleAddDay = async () => {
     try {
-      await itineraryService.addDay(id, { catatan: 'Hari baru' }, token);
+      const nextUrutan = days.length > 0 ? Math.max(...days.map(d => d.urutanHari || d.hariKe || 0)) + 1 : 1;
+
+      // Calculate the date based on trip start date + day offset
+      const startDate = new Date(tripData.tanggalMulai);
+      startDate.setDate(startDate.getDate() + nextUrutan - 1);
+      const tanggalStr = startDate.toISOString().split('T')[0];
+
+      await itineraryService.addDay(id, {
+        tanggal: tanggalStr,
+        urutanHari: nextUrutan,
+        catatan: `Hari ke-${nextUrutan}`
+      }, token);
       fetchItinerary();
     } catch (err) {
       alert('Gagal menambah hari');

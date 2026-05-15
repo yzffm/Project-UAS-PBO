@@ -1,5 +1,6 @@
 package com.travelplanner.model.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travelplanner.model.User;
 import com.travelplanner.model.enums.StatusTrip;
 import jakarta.persistence.*;
@@ -44,6 +45,7 @@ public abstract class Perjalanan {
 
     private String coverImageUrl;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User pemilik;

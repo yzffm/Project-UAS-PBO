@@ -1,5 +1,6 @@
 package com.travelplanner.model.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travelplanner.model.Kalkulasi;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -39,6 +40,7 @@ public abstract class AnggaranItem implements Kalkulasi {
     @Column(columnDefinition = "TEXT")
     private String catatan;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id")
     private Perjalanan perjalanan;

@@ -51,11 +51,12 @@ const AddDestinationModal = ({ isOpen, onClose, onAdd }) => {
       alert('Pilih destinasi terlebih dahulu');
       return;
     }
-    // format as expected by JadwalDestinasi
+    // format as expected by ItineraryController.addSchedule()
     const payload = {
       destinasiId: parseInt(formData.destinasiId),
-      jamMulai: formData.jamMulai + ':00', // API expects LocalTime
-      jamSelesai: formData.jamSelesai + ':00',
+      waktuMulai: formData.jamMulai + ':00',   // Backend expects "waktuMulai" as LocalTime "HH:mm:ss"
+      waktuSelesai: formData.jamSelesai + ':00', // Backend expects "waktuSelesai" as LocalTime "HH:mm:ss"
+      urutan: 1, // Default schedule order; auto-incremented on backend if needed
       catatan: formData.catatan
     };
     onAdd(payload);

@@ -1,14 +1,11 @@
 package com.travelplanner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travelplanner.model.base.Destinasi;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
 
-/**
- * JadwalDestinasi — links a destination to a specific day with time and order.
- * Acts as a schedule item within a day's itinerary.
- */
 @Entity
 @Table(name = "jadwal_destinasi")
 public class JadwalDestinasi {
@@ -26,11 +23,13 @@ public class JadwalDestinasi {
     @Column(columnDefinition = "TEXT")
     private String catatan;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hari_id")
     private HariPerjalanan hariPerjalanan;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // FIX: Ubah dari LAZY menjadi EAGER agar Jackson tidak crash saat parsing JSON
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "destinasi_id")
     private Destinasi destinasi;
 
