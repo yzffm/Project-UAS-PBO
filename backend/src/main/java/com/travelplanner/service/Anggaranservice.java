@@ -1,6 +1,6 @@
 package com.travelplanner.service;
 
-import com.travelplanner.dto.response.BudgetSummaryResponse;
+import com.travelplanner.dto.response.BudgetSummaryResponseDTO;
 import com.travelplanner.exception.ResourceNotFoundException;
 import com.travelplanner.factory.AnggaranFactory;
 import com.travelplanner.dto.request.AnggaranRequestDTO;
@@ -24,14 +24,14 @@ public class AnggaranService {
 
     // Constructor Injection — SOLID (Dependency Inversion)
     public AnggaranService(AnggaranRepository anggaranRepository,
-                           BudgetStrategyFactory budgetStrategyFactory,
-                           PerjalananService perjalananService) {
+            BudgetStrategyFactory budgetStrategyFactory,
+            PerjalananService perjalananService) {
         this.anggaranRepository = anggaranRepository;
         this.budgetStrategyFactory = budgetStrategyFactory;
         this.perjalananService = perjalananService;
     }
 
-    // ===== CRUD Operations (called by AnggaranController) =====
+    // ===== CRUD Operations =====
 
     public List<AnggaranItem> getAllAnggaran() {
         return anggaranRepository.findAll();
@@ -39,7 +39,7 @@ public class AnggaranService {
 
     public AnggaranItem getAnggaranById(Long id) {
         return anggaranRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Anggaran dengan id " + id + " tidak ditemukan"));
+                .orElseThrow(() -> new ResourceNotFoundException("Anggaran dengan id " + id + " tidak ditemukan"));
     }
 
     public List<AnggaranItem> getAnggaranByTripId(Long tripId) {
@@ -51,7 +51,8 @@ public class AnggaranService {
     }
 
     public AnggaranItem createAnggaran(Long tripId, AnggaranRequestDTO dto) {
-        Perjalanan perjalanan = perjalananService.getTripById(tripId);
+        // FIX: pakai getTripEntityById() — return raw Perjalanan entity, bukan DTO
+        Perjalanan perjalanan = perjalananService.getTripEntityById(tripId);
         AnggaranItem item = AnggaranFactory.create(dto.getKategori(), dto);
         item.setPerjalanan(perjalanan);
         return anggaranRepository.save(item);
@@ -74,8 +75,8 @@ public class AnggaranService {
 
     public Double hitungTotalAnggaran() {
         return anggaranRepository.findAll().stream()
-            .mapToDouble(AnggaranItem::getEstimasiHarga)
-            .sum();
+                .mapToDouble(AnggaranItem::getEstimasiHarga)
+                .sum();
     }
 
     // ===== Strategy Pattern: Budget Summary =====
@@ -84,34 +85,32 @@ public class AnggaranService {
      * Generates a budget summary using the Strategy Pattern.
      * The strategy is selected based on the trip type (SOLO/GRUP/KELUARGA).
      */
-    public BudgetSummaryResponse getBudgetSummary(Long tripId, String tipePerjalanan) {
+    public BudgetSummaryResponseDTO getBudgetSummary(Long tripId, String tipePerjalanan) {
         List<AnggaranItem> items = anggaranRepository.findByPerjalananId(tripId);
 
-        // Select strategy based on trip type
         BudgetStrategy strategy = budgetStrategyFactory.selectStrategy(tipePerjalanan);
 
         Double totalEstimasi = strategy.hitungTotalEstimasi(items);
         Double totalAktual = strategy.hitungTotalAktual(items);
         Map<String, Double> perKategoriRaw = strategy.hitungPerKategori(items);
 
-        // Build per-category breakdown with icons
-        Map<String, BudgetSummaryResponse.CategoryBudget> perKategori = new HashMap<>();
+        Map<String, BudgetSummaryResponseDTO.CategoryBudget> perKategori = new HashMap<>();
         for (Map.Entry<String, Double> entry : perKategoriRaw.entrySet()) {
             String kategori = entry.getKey();
             Double estimasi = entry.getValue();
             Double aktual = items.stream()
-                .filter(item -> item.getKategoriAnggaran().equals(kategori))
-                .mapToDouble(AnggaranItem::getHargaAktual)
-                .sum();
+                    .filter(item -> item.getKategoriAnggaran().equals(kategori))
+                    .mapToDouble(AnggaranItem::getHargaAktual)
+                    .sum();
             String icon = items.stream()
-                .filter(item -> item.getKategoriAnggaran().equals(kategori))
-                .findFirst()
-                .map(AnggaranItem::getIconAnggaran)
-                .orElse("📦");
+                    .filter(item -> item.getKategoriAnggaran().equals(kategori))
+                    .findFirst()
+                    .map(AnggaranItem::getIconAnggaran)
+                    .orElse("📦");
 
-            perKategori.put(kategori, new BudgetSummaryResponse.CategoryBudget(estimasi, aktual, icon));
+            perKategori.put(kategori, new BudgetSummaryResponseDTO.CategoryBudget(estimasi, aktual, icon));
         }
 
-        return new BudgetSummaryResponse(totalEstimasi, totalAktual, perKategori);
+        return new BudgetSummaryResponseDTO(totalEstimasi, totalAktual, perKategori);
     }
 }

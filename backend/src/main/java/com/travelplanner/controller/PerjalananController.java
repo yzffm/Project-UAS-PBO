@@ -1,8 +1,8 @@
 package com.travelplanner.controller;
 
 import com.travelplanner.dto.request.PerjalananRequestDTO;
+import com.travelplanner.dto.response.PerjalananResponseDTO;
 import com.travelplanner.model.User;
-import com.travelplanner.model.base.Perjalanan;
 import com.travelplanner.service.PerjalananService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,11 +28,11 @@ public class PerjalananController {
      * Endpoint: POST /api/trips
      */
     @PostMapping
-    public ResponseEntity<Perjalanan> createTrip(
+    public ResponseEntity<PerjalananResponseDTO> createTrip(
             @Valid @RequestBody PerjalananRequestDTO dto,
             @AuthenticationPrincipal User user) {
-        
-        Perjalanan newTrip = perjalananService.createTrip(dto, user);
+
+        PerjalananResponseDTO newTrip = perjalananService.createTrip(dto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTrip);
     }
 
@@ -41,8 +41,10 @@ public class PerjalananController {
      * Endpoint: GET /api/trips
      */
     @GetMapping
-    public ResponseEntity<List<Perjalanan>> getAllTrips(@AuthenticationPrincipal User user) {
-        List<Perjalanan> trips = perjalananService.getTripsByUser(user);
+    public ResponseEntity<List<PerjalananResponseDTO>> getAllTrips(
+            @AuthenticationPrincipal User user) {
+
+        List<PerjalananResponseDTO> trips = perjalananService.getTripsByUser(user);
         return ResponseEntity.ok(trips);
     }
 
@@ -51,8 +53,8 @@ public class PerjalananController {
      * Endpoint: GET /api/trips/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Perjalanan> getTripDetail(@PathVariable Long id) {
-        Perjalanan trip = perjalananService.getTripById(id);
+    public ResponseEntity<PerjalananResponseDTO> getTripDetail(@PathVariable Long id) {
+        PerjalananResponseDTO trip = perjalananService.getTripById(id);
         return ResponseEntity.ok(trip);
     }
 
@@ -65,4 +67,4 @@ public class PerjalananController {
         perjalananService.deleteTrip(id);
         return ResponseEntity.noContent().build();
     }
-}   
+}
