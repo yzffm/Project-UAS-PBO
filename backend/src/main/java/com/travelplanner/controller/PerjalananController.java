@@ -58,6 +58,14 @@ public class PerjalananController {
         return ResponseEntity.ok(trip);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PerjalananResponseDTO> updateTrip(
+            @PathVariable Long id,
+            @RequestBody com.travelplanner.dto.request.PerjalananRequestDTO dto,
+            @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(perjalananService.updateTrip(id, dto, user));
+    }
+
     /**
      * Menghapus perjalanan berdasarkan ID.
      * Endpoint: DELETE /api/trips/{id}

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Clock, Trash2, MapPin } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { Clock, Trash2, MapPin, Edit2 } from 'lucide-react';
 
-const ScheduleItem = ({ item, onDelete }) => {
+const ScheduleItem = ({ item, onDelete, onEdit }) => {
   const destinasi = item.destinasi || {};
 
   const formatTime = (timeString) => {
@@ -53,13 +53,22 @@ const ScheduleItem = ({ item, onDelete }) => {
       </div>
 
       {/* Action */}
-      <button
-        onClick={() => onDelete(item.id)}
-        className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors shrink-0"
-        title="Hapus Jadwal"
-      >
-        <Trash2 size={18} />
-      </button>
+      <div className="flex flex-col gap-2 shrink-0">
+        <button
+          onClick={() => onEdit(item)}
+          className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+          title="Edit Jadwal"
+        >
+          <Edit2 size={18} />
+        </button>
+        <button
+          onClick={() => onDelete(item.id)}
+          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+          title="Hapus Jadwal"
+        >
+          <Trash2 size={18} />
+        </button>
+      </div>
     </div>
   );
 };

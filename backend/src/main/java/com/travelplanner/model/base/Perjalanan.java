@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import com.travelplanner.model.HariPerjalanan;
 
 /**
  * ABSTRACT SUPERCLASS: Perjalanan
@@ -49,6 +51,12 @@ public abstract class Perjalanan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User pemilik;
+
+    @OneToMany(mappedBy = "perjalanan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HariPerjalanan> hariPerjalananList;
+
+    @OneToMany(mappedBy = "perjalanan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnggaranItem> anggaranItemList;
 
     // ===== Constructors =====
 

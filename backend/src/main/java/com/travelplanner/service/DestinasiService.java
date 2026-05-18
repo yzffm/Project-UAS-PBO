@@ -21,14 +21,20 @@ public class DestinasiService {
     }
 
     // Method 1: Ambil semua destinasi dengan filter tipe
-    public List<Destinasi> findAll(String tipe) {
-        List<Destinasi> semuaDestinasi = destinasiRepository.findAll();
+    // UBAH method findAll menjadi seperti ini:
+    public List<Destinasi> findAll(String tipe, String query) {
+        // 1. Filter berdasarkan pencarian nama dulu (jika ada)
+        List<Destinasi> destinasiAwal = (query != null && !query.isBlank())
+                ? destinasiRepository.findByNamaContainingIgnoreCase(query)
+                : destinasiRepository.findAll();
 
+        // 2. Jika tidak ada filter kategori, langsung kembalikan
         if (tipe == null || tipe.isBlank() || tipe.equalsIgnoreCase("Semua")) {
-            return semuaDestinasi;
+            return destinasiAwal;
         }
 
-        return semuaDestinasi.stream()
+        // 3. Filter list berdasarkan subclass (Polymorphism)
+        return destinasiAwal.stream()
                 .filter(destinasi -> {
                     if (tipe.equalsIgnoreCase("ALAM"))
                         return destinasi instanceof WisataAlam;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { CalendarDays, Banknote, BarChart3, MapPin, ArrowLeft, Trash2 } from 'lucide-react';
+import { Edit3 } from 'lucide-react'; // Tambahkan Edit3 ke import lucide-react
+import EditTripModal from '../components/trip/EditTripModal';
 
 import DayCard from '../components/itinerary/DayCard';
 import BudgetTable from '../components/budget/BudgetTable';
@@ -43,6 +45,7 @@ const TripDetailPage = () => {
 
   const [showBudgetForm, setShowBudgetForm] = useState(false);
   const [editingBudgetItem, setEditingBudgetItem] = useState(null);
+  const [showEditTrip, setShowEditTrip] = useState(false);
 
   const fetchTripDetails = async () => {
     try {
@@ -113,14 +116,34 @@ const TripDetailPage = () => {
   if (error) return <div className="text-center mt-20 text-red-600">{error}</div>;
   if (!tripData) return <div className="text-center mt-20">Trip tidak ditemukan</div>;
 
+
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
       {/* Header Banner */}
       <div className="bg-blue-600 text-white pt-6 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
-          <Link to="/dashboard" className="inline-flex items-center gap-2 text-blue-100 hover:text-white mb-6 transition">
-            <ArrowLeft className="h-4 w-4" /> Kembali ke Dashboard
-          </Link>
+          {/* BAGIAN YANG DIPERBAIKI: Penambahan Tombol Edit & Delete di sejajar tombol kembali */}
+          <div className="flex justify-between items-center mb-6">
+            <Link to="/dashboard" className="inline-flex items-center gap-2 text-blue-100 hover:text-white transition">
+              <ArrowLeft className="h-4 w-4" /> Kembali ke Dashboard
+            </Link>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowEditTrip(true)}
+                className="inline-flex items-center gap-2 bg-white/20 text-white hover:bg-white/30 px-4 py-2 rounded-xl transition text-sm font-bold border border-white/30 backdrop-blur-sm shadow-sm"
+              >
+                <Edit3 className="h-4 w-4" /> Edit Trip
+              </button>
+              <button
+                onClick={handleDeleteTrip}
+                className="inline-flex items-center gap-2 bg-red-500/20 text-red-50 hover:bg-red-500 hover:text-white px-4 py-2 rounded-xl transition text-sm font-bold border border-red-400/30 backdrop-blur-sm shadow-sm"
+              >
+                <Trash2 className="h-4 w-4" /> Hapus Trip
+              </button>
+            </div>
+          </div>
+
           <div className="flex items-center gap-4 mb-2">
             <span className="bg-blue-500/30 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-blue-400/30">
               {tripData.tipePerjalanan}
@@ -270,7 +293,7 @@ const TripDetailPage = () => {
                     <div className={`flex justify-between items-center p-4 rounded-xl font-bold ${budgetSummary.statusBudget === 'OVER_BUDGET' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
                       }`}>
                       <span>Selisih</span>
-                      <span>Rp {budgetSummary.selisih?.toLocaleString('id-ID')}</span>
+                      <span>Rp {Math.abs(budgetSummary.selisih || 0).toLocaleString('id-ID')}</span>
                     </div>
                     <div className="mt-4 p-4 border border-blue-100 bg-blue-50 rounded-xl text-blue-800 text-sm">
                       <strong>Strategi Budget:</strong> Perhitungan ini menggunakan {tripData?.tipePerjalanan} Budget Strategy.
@@ -282,6 +305,17 @@ const TripDetailPage = () => {
           )}
         </div>
       </div>
+
+      {/* BAGIAN YANG DIPERBAIKI: Pemanggilan EditTripModal */}
+      {showEditTrip && (
+        <EditTripModal
+          trip={tripData}
+          token={token}
+          onClose={() => setShowEditTrip(false)}
+          onSuccess={() => { setShowEditTrip(false); fetchTripDetails(); }}
+          onDelete={handleDeleteTrip}
+        />
+      )}
     </div>
   );
 };

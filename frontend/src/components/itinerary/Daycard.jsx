@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import ScheduleItem from './ScheduleItem';
-import AddDestinationModal from './AddDestinationModal';
 import { Plus, Calendar, Trash2 } from 'lucide-react';
 import itineraryService from '../../services/itineraryService';
 import { useAuth } from '../../context/AuthContext';
+import DestinationScheduleModal from './DestinationScheduleModal';
 
 const DayCard = ({ day, tripId, onUpdate }) => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -20,13 +20,20 @@ const DayCard = ({ day, tripId, onUpdate }) => {
     }
   };
 
-  const handleAddSchedule = async (scheduleData) => {
+  const [editingSchedule, setEditingSchedule] = useState(null);
+
+  const handleSaveSchedule = async (scheduleData, schedId) => {
     try {
-      await itineraryService.addSchedule(tripId, day.id, scheduleData, token);
+      if (schedId) {
+        await itineraryService.updateSchedule(tripId, day.id, schedId, scheduleData, token);
+      } else {
+        await itineraryService.addSchedule(tripId, day.id, scheduleData, token);
+      }
       setShowAddModal(false);
+      setEditingSchedule(null);
       onUpdate();
     } catch (err) {
-      alert('Gagal menambah jadwal');
+      alert(err);
     }
   };
 
@@ -81,6 +88,7 @@ const DayCard = ({ day, tripId, onUpdate }) => {
                 <div className="absolute -left-[11px] top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
                 <ScheduleItem
                   item={item}
+                  onEdit={(sch) => { setEditingSchedule(sch); setShowAddModal(true); }}
                   onDelete={handleDeleteSchedule}
                 />
               </div>
@@ -100,10 +108,11 @@ const DayCard = ({ day, tripId, onUpdate }) => {
       </div>
 
       {showAddModal && (
-        <AddDestinationModal
+        <DestinationScheduleModal
           isOpen={showAddModal}
-          onClose={() => setShowAddModal(false)}
-          onAdd={handleAddSchedule}
+          itemToEdit={editingSchedule}
+          onClose={() => { setShowAddModal(false); setEditingSchedule(null); }}
+          onSave={handleSaveSchedule}
         />
       )}
     </div>

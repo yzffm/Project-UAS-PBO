@@ -21,17 +21,17 @@ const DestinationsPage = () => {
       setLoading(true);
       setError('');
       try {
+        // UBAH bagian dalam blok try catch di fetchDestinations:
         const filters = {};
         if (selectedCategory && selectedCategory !== 'Semua') {
           filters.tipe = selectedCategory;
         }
-        
-        let data;
         if (searchTerm.length > 2) {
-          data = await destinationService.searchDestinations(searchTerm, token);
-        } else {
-          data = await destinationService.getAllDestinations(filters, token);
+          filters.q = searchTerm; // Tambahkan query pencarian ke filter
         }
+
+        // Panggil getAllDestinations saja (sudah menangani query dan tipe)
+        const data = await destinationService.getAllDestinations(filters, token);
         setDestinations(data || []);
       } catch (err) {
         setError(err);
@@ -71,7 +71,7 @@ const DestinationsPage = () => {
             value={searchTerm}
           />
         </div>
-        
+
         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
           {categories.map(cat => {
             const isSelected = (selectedCategory === cat) || (selectedCategory === '' && cat === 'Semua');
@@ -79,11 +79,10 @@ const DestinationsPage = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
-                className={`px-6 py-3.5 rounded-2xl font-bold whitespace-nowrap transition-all ${
-                  isSelected 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
-                }`}
+                className={`px-6 py-3.5 rounded-2xl font-bold whitespace-nowrap transition-all ${isSelected
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
+                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                  }`}
               >
                 {cat}
               </button>
@@ -102,16 +101,16 @@ const DestinationsPage = () => {
           {destinations.map(dest => (
             <div key={dest.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
               <div className="relative h-56 overflow-hidden bg-gray-100">
-                <img 
-                  src={dest.gambarUrl || 'https://via.placeholder.com/400x300?text=No+Image'} 
-                  alt={dest.nama} 
+                <img
+                  src={dest.gambarUrl || 'https://via.placeholder.com/400x300?text=No+Image'}
+                  alt={dest.nama}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black tracking-widest text-blue-600 shadow-sm border border-white/20">
                   {dest.kategori}
                 </div>
               </div>
-              
+
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center gap-1.5 text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">
                   <MapPin className="h-4 w-4" />
@@ -121,7 +120,7 @@ const DestinationsPage = () => {
                 <p className="text-green-600 font-black text-lg mb-6">
                   {formatCurrency(dest.estimasiBiaya)}
                 </p>
-                
+
                 <div className="mt-auto">
                   <Link to={`/destinations/${dest.id}`} className="block w-full py-3 text-center bg-gray-50 text-gray-800 rounded-xl text-sm font-bold hover:bg-blue-600 hover:text-white transition-colors duration-300">
                     Lihat Detail

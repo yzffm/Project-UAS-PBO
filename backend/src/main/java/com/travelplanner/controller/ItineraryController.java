@@ -42,9 +42,31 @@ public class ItineraryController {
             @PathVariable Long dayId,
             @RequestBody Map<String, Object> body) {
         LocalDate tanggal = body.containsKey("tanggal") ? LocalDate.parse(body.get("tanggal").toString()) : null;
-        Integer urutanHari = body.containsKey("urutanHari") ? Integer.parseInt(body.get("urutanHari").toString()) : null;
+        Integer urutanHari = body.containsKey("urutanHari") ? Integer.parseInt(body.get("urutanHari").toString())
+                : null;
         String catatan = body.containsKey("catatan") ? body.get("catatan").toString() : null;
         return ResponseEntity.ok(itineraryService.updateDay(dayId, tanggal, urutanHari, catatan));
+    }
+
+    @PutMapping("/{dayId}/schedule/{schedId}")
+    public ResponseEntity<JadwalDestinasi> updateSchedule(
+            @PathVariable Long tripId,
+            @PathVariable Long dayId,
+            @PathVariable Long schedId,
+            @RequestBody Map<String, Object> body) {
+
+        Long destinasiId = body.containsKey("destinasiId") && body.get("destinasiId") != null
+                ? Long.parseLong(body.get("destinasiId").toString())
+                : null;
+        LocalTime mulai = body.containsKey("waktuMulai") && body.get("waktuMulai") != null
+                ? LocalTime.parse(body.get("waktuMulai").toString())
+                : null;
+        LocalTime selesai = body.containsKey("waktuSelesai") && body.get("waktuSelesai") != null
+                ? LocalTime.parse(body.get("waktuSelesai").toString())
+                : null;
+        String catatan = body.containsKey("catatan") ? body.get("catatan").toString() : null;
+
+        return ResponseEntity.ok(itineraryService.updateSchedule(schedId, destinasiId, mulai, selesai, catatan));
     }
 
     @DeleteMapping("/{dayId}")
@@ -62,13 +84,16 @@ public class ItineraryController {
             @RequestBody Map<String, Object> body) {
         Long destinasiId = Long.parseLong(body.get("destinasiId").toString());
         Integer urutan = body.containsKey("urutan") && body.get("urutan") != null
-                ? Integer.parseInt(body.get("urutan").toString()) : 1;
+                ? Integer.parseInt(body.get("urutan").toString())
+                : 1;
         LocalTime mulai = body.containsKey("waktuMulai") && body.get("waktuMulai") != null
-                ? LocalTime.parse(body.get("waktuMulai").toString()) : null;
+                ? LocalTime.parse(body.get("waktuMulai").toString())
+                : null;
         LocalTime selesai = body.containsKey("waktuSelesai") && body.get("waktuSelesai") != null
-                ? LocalTime.parse(body.get("waktuSelesai").toString()) : null;
+                ? LocalTime.parse(body.get("waktuSelesai").toString())
+                : null;
         String catatan = body.containsKey("catatan") ? body.get("catatan").toString() : null;
-        
+
         return ResponseEntity.ok(itineraryService.addSchedule(dayId, destinasiId, urutan, mulai, selesai, catatan));
     }
 

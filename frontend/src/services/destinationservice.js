@@ -14,6 +14,10 @@ const destinationService = {
         const params = new URLSearchParams();
         if (filters.tipe) params.append('tipe', filters.tipe);
         if (filters.lokasi) params.append('lokasi', filters.lokasi);
+
+        // FIX: Tambahkan baris ini agar parameter pencarian (q) ikut dikirim ke backend!
+        if (filters.q) params.append('q', filters.q);
+
         queryStr = `?${params.toString()}`;
       }
       const response = await axios.get(`${API_URL}/destinasi${queryStr}`, getHeaders(token));

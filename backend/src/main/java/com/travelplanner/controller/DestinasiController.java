@@ -19,20 +19,20 @@ public class DestinasiController {
     }
 
     // FIX: Menerima param 'tipe' dan meneruskannya ke Service
+    // UBAH method getAll menjadi seperti ini:
     @GetMapping
-    public ResponseEntity<List<Destinasi>> getAll(@RequestParam(required = false) String tipe) {
-        return ResponseEntity.ok(destinasiService.findAll(tipe));
+    public ResponseEntity<List<Destinasi>> getAll(
+            @RequestParam(required = false) String tipe,
+            @RequestParam(required = false) String q) { // Tambahkan param q
+        return ResponseEntity.ok(destinasiService.findAll(tipe, q));
     }
+
+    // Method search() di bawahnya boleh dihapus saja karena sudah digabung ke
+    // getAll
 
     // Mencari destinasi berdasarkan ID
     @GetMapping("/{id}")
     public ResponseEntity<Destinasi> getById(@PathVariable Long id) {
         return ResponseEntity.ok(destinasiService.findById(id));
-    }
-
-    // Fitur Search untuk pencarian nama/lokasi
-    @GetMapping("/search")
-    public ResponseEntity<List<Destinasi>> search(@RequestParam String q) {
-        return ResponseEntity.ok(destinasiService.search(q));
     }
 }

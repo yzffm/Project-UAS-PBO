@@ -80,7 +80,12 @@ const Navbar = () => {
                 >
                   <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-xl shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <Menu.Item>
-                      <button 
+                      <Link to="/profile" className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <UserCircleIcon className="h-4 w-4" /> Profil Saya
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <button
                         onClick={logout}
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                       >
@@ -127,7 +132,7 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="border-t border-gray-100 my-2 pt-2">
-              <button 
+              <button
                 onClick={() => { setIsOpen(false); logout(); }}
                 className="flex w-full items-center gap-3 px-3 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50"
               >

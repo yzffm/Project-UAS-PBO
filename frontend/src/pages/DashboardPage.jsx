@@ -84,7 +84,7 @@ const DashboardPage = () => {
           {/* Card Kosong untuk pemicu buat baru */}
           <Link to="/trips/new" className="border-2 border-dashed border-gray-300 bg-white rounded-2xl flex flex-col items-center justify-center p-10 text-gray-400 hover:border-blue-400 hover:text-blue-500 transition hover:shadow-md">
             <span className="text-4xl mb-2">+</span>
-            <p className="font-medium">Tambah Trip Lainnya</p>
+            <p className="font-medium">Tambah Rencana Baru</p>
           </Link>
         </div>
       )}

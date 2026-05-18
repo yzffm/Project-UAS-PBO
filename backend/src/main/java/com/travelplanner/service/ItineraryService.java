@@ -44,7 +44,6 @@ public class ItineraryService {
         Perjalanan perjalanan = perjalananRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip tidak ditemukan"));
 
-        // FIX 2: Validasi Durasi Hari di Backend
         if (urutanHari > perjalanan.getDurasiHari()) {
             throw new com.travelplanner.exception.InvalidInputException(
                     "Tidak dapat menambahkan hari. Maksimal durasi trip adalah " + perjalanan.getDurasiHari()
@@ -82,6 +81,7 @@ public class ItineraryService {
     }
 
     // UPDATE: Tambah parameter "urutan" dan sesuaikan setter waktu
+    // UBAH method addSchedule menjadi seperti ini:
     @Transactional
     public JadwalDestinasi addSchedule(Long dayId, Long destinasiId, Integer urutan, LocalTime mulai, LocalTime selesai,
             String catatan) {
@@ -91,11 +91,25 @@ public class ItineraryService {
         Destinasi destinasi = destinasiRepository.findById(destinasiId)
                 .orElseThrow(() -> new ResourceNotFoundException("Destinasi tidak ditemukan"));
 
+        // FIX: Validasi jadwal bertabrakan (Overlap)
+        if (mulai != null && selesai != null) {
+            for (JadwalDestinasi jadwalAda : hari.getJadwalList()) {
+                LocalTime adaMulai = jadwalAda.getWaktuMulai();
+                LocalTime adaSelesai = jadwalAda.getWaktuSelesai();
+
+                // Cek apakah rentang waktu saling tumpang tindih
+                if (adaMulai != null && adaSelesai != null) {
+                    if (mulai.isBefore(adaSelesai) && selesai.isAfter(adaMulai)) {
+                        throw new com.travelplanner.exception.InvalidInputException(
+                                "Waktu bertabrakan dengan jadwal: " + jadwalAda.getDestinasi().getNama());
+                    }
+                }
+            }
+        }
+
         JadwalDestinasi jadwal = new JadwalDestinasi();
         jadwal.setHariPerjalanan(hari);
         jadwal.setDestinasi(destinasi);
-
-        // Penyesuaian dengan setter di JadwalDestinasi buatan lu
         jadwal.setUrutan(urutan);
         jadwal.setWaktuMulai(mulai);
         jadwal.setWaktuSelesai(selesai);
@@ -110,5 +124,27 @@ public class ItineraryService {
             throw new ResourceNotFoundException("Jadwal tidak ditemukan");
         }
         jadwalDestinasiRepository.deleteById(scheduleId);
+    }
+
+    @Transactional
+    public JadwalDestinasi updateSchedule(Long scheduleId, Long destinasiId, LocalTime mulai, LocalTime selesai,
+            String catatan) {
+        JadwalDestinasi jadwal = jadwalDestinasiRepository.findById(scheduleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Jadwal tidak ditemukan"));
+
+        if (destinasiId != null) {
+            Destinasi dest = destinasiRepository.findById(destinasiId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Destinasi tidak ditemukan"));
+            jadwal.setDestinasi(dest);
+        }
+
+        if (mulai != null)
+            jadwal.setWaktuMulai(mulai);
+        if (selesai != null)
+            jadwal.setWaktuSelesai(selesai);
+        if (catatan != null)
+            jadwal.setCatatan(catatan);
+
+        return jadwalDestinasiRepository.save(jadwal);
     }
 }

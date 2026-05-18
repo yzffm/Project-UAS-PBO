@@ -32,7 +32,7 @@ public class UserService {
         user.setNama(dto.getNama());
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        
+
         userRepository.save(user);
 
         String token = jwtUtil.generateToken(user.getEmail());
@@ -54,5 +54,22 @@ public class UserService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidInputException("User tidak ditemukan"));
+    }
+
+    public User updateProfile(User user, com.travelplanner.dto.request.UserUpdateRequestDTO dto) {
+        if (dto.getNama() != null && !dto.getNama().isBlank()) {
+            user.setNama(dto.getNama());
+        }
+        // Jika email diubah dan tidak sama dengan email lama, cek apakah sudah dipakai
+        if (dto.getEmail() != null && !dto.getEmail().isBlank() && !dto.getEmail().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(dto.getEmail())) {
+                throw new InvalidInputException("Email sudah terdaftar oleh pengguna lain");
+            }
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        return userRepository.save(user);
     }
 }

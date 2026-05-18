@@ -39,6 +39,17 @@ const itineraryService = {
       throw error.response?.data?.message || error.message || 'Failed to add schedule';
     }
   },
+
+  // Tambahkan ini di bawah method addSchedule:
+  updateSchedule: async (tripId, dayId, schedId, data, token) => {
+    try {
+      const response = await axios.put(`${API_URL}/trips/${tripId}/days/${dayId}/schedule/${schedId}`, data, getHeaders(token));
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || error.message || 'Failed to update schedule';
+    }
+  },
+
   deleteSchedule: async (tripId, dayId, schedId, token) => {
     try {
       const response = await axios.delete(`${API_URL}/trips/${tripId}/days/${dayId}/schedule/${schedId}`, getHeaders(token));

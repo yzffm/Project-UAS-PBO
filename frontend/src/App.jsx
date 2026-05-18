@@ -12,6 +12,7 @@ import CreateTripPage from './pages/CreateTripPage';
 import TripDetailPage from './pages/TripDetailPage';
 import DestinationsPage from './pages/DestinationsPage';
 import DestinationDetailPage from './pages/DestinationDetailPage';
+import ProfilePage from './pages/ProfilePage';
 
 const PublicOnlyRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -26,7 +27,7 @@ const AppContent = () => {
       <main className="flex-grow bg-gray-50">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          
+
           <Route path="/login" element={
             <PublicOnlyRoute>
               <LoginPage />
@@ -43,28 +44,33 @@ const AppContent = () => {
               <DashboardPage />
             </ProtectedRoute>
           } />
-          
+
           <Route path="/trips/new" element={
             <ProtectedRoute>
               <CreateTripPage />
             </ProtectedRoute>
           } />
-          
+
           <Route path="/trips/:id" element={
             <ProtectedRoute>
               <TripDetailPage />
             </ProtectedRoute>
           } />
-          
+
           <Route path="/destinations" element={
             <ProtectedRoute>
               <DestinationsPage />
             </ProtectedRoute>
           } />
-          
+
           <Route path="/destinations/:id" element={
             <ProtectedRoute>
               <DestinationDetailPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           } />
         </Routes>

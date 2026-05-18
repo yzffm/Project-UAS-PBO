@@ -111,4 +111,20 @@ public class PerjalananService {
 
         return dto;
     }
+
+    public PerjalananResponseDTO updateTrip(Long id, PerjalananRequestDTO dto, User user) {
+        Perjalanan p = getTripEntityById(id);
+
+        // Pastikan hanya pemilik yang bisa edit
+        if (!p.getPemilik().getId().equals(user.getId())) {
+            throw new com.travelplanner.exception.InvalidInputException("Anda tidak memiliki akses mengedit trip ini");
+        }
+
+        p.setNamaTrip(dto.getNamaTrip());
+        p.setDeskripsiTrip(dto.getDeskripsiTrip());
+        p.setTanggalMulai(dto.getTanggalMulai());
+        p.setTanggalSelesai(dto.getTanggalSelesai());
+
+        return toDTO(perjalananRepository.save(p));
+    }
 }

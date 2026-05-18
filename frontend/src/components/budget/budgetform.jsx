@@ -39,7 +39,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const payload = {
       ...formData,
       estimasiHarga: parseFloat(formData.estimasiHarga) || 0,
@@ -160,7 +160,8 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               name="sudahDibayar"
               checked={formData.sudahDibayar}
               onChange={handleChange}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              disabled={!formData.hargaAktual || parseFloat(formData.hargaAktual) <= 0}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <label htmlFor="sudahDibayar" className="text-sm font-bold text-gray-700 cursor-pointer">
               Tandai Lunas (Sudah Dibayar)
