@@ -55,6 +55,15 @@ public class PerjalananKeluarga extends Perjalanan {
         return "orange";
     }
 
+    @Override
+    public double hitungBiayaPerOrang(double totalBiaya) {
+        int totalKeluarga = getMaxPeserta();
+        if (totalKeluarga <= 0)
+            return totalBiaya;
+        double totalSetelahEfisiensi = totalBiaya * 0.90;
+        return totalSetelahEfisiensi / totalKeluarga;
+    }
+
     // ===== Getters & Setters =====
 
     public Integer getJumlahDewasa() {

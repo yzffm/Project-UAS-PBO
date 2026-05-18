@@ -1,22 +1,18 @@
 package com.travelplanner.strategy;
 
 import com.travelplanner.model.base.AnggaranItem;
+import com.travelplanner.model.base.Perjalanan;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * STRATEGY PATTERN: Interface for budget calculation algorithms.
- * Each trip type gets a different strategy with different buffer calculations.
- */
 public interface BudgetStrategy {
-    Double hitungTotalEstimasi(List<AnggaranItem> items);
-    Double hitungTotalAktual(List<AnggaranItem> items);
-    Map<String, Double> hitungPerKategori(List<AnggaranItem> items);
+    // Ditambahkan parameter Perjalanan perjalanan agar strategi tahu jenis trip-nya
+    Double hitungTotalEstimasi(List<AnggaranItem> items, Perjalanan perjalanan);
 
-    /**
-     * Calculates recommended budget based on a base total.
-     * Each strategy applies its own buffer/multiplier.
-     */
-    double calculateRecommendedBudget(double baseTotal);
+    Double hitungTotalAktual(List<AnggaranItem> items, Perjalanan perjalanan);
+
+    Map<String, Double> hitungPerKategori(List<AnggaranItem> items, Perjalanan perjalanan);
+
+    double calculateRecommendedBudget(double baseTotal, Perjalanan perjalanan);
 }

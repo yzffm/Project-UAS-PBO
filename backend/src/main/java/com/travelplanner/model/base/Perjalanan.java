@@ -72,6 +72,8 @@ public abstract class Perjalanan {
     /** Returns CSS color class for UI badge */
     public abstract String getBadgeWarna();
 
+    public abstract double hitungBiayaPerOrang(double totalBiaya);
+
     // ===== Concrete method — inherited by all subclasses =====
 
     public long getDurasiHari() {

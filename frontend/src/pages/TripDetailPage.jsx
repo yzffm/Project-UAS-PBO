@@ -296,7 +296,7 @@ const TripDetailPage = () => {
                       <span>Rp {Math.abs(budgetSummary.selisih || 0).toLocaleString('id-ID')}</span>
                     </div>
                     <div className="mt-4 p-4 border border-blue-100 bg-blue-50 rounded-xl text-blue-800 text-sm">
-                      <strong>Strategi Budget:</strong> Perhitungan ini menggunakan {tripData?.tipePerjalanan} Budget Strategy.
+                      <strong>Tipe Perjalanan:</strong> {tripData?.tipePerjalanan}. <strong>Kelas Anggaran:</strong> {tripData?.kelasAnggaran}.
                     </div>
                   </div>
                 )}

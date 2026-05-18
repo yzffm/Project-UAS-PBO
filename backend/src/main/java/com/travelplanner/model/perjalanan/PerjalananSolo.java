@@ -49,6 +49,12 @@ public class PerjalananSolo extends Perjalanan {
         return "blue";
     }
 
+    @Override
+    public double hitungBiayaPerOrang(double totalBiaya) {
+        // Solo trip: Biaya tidak dibagi, ditanggung sendiri 100%
+        return totalBiaya;
+    }
+
     // ===== Getters & Setters =====
 
     public String getMoodPerjalanan() {

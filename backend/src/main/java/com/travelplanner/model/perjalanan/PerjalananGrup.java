@@ -53,6 +53,14 @@ public class PerjalananGrup extends Perjalanan {
         return "green";
     }
 
+    @Override
+    public double hitungBiayaPerOrang(double totalBiaya) {
+        // Group trip: Biaya dibagi rata sesuai jumlah peserta
+        if (jumlahPeserta == null || jumlahPeserta <= 0)
+            return totalBiaya; // Safety check
+        return totalBiaya / jumlahPeserta;
+    }
+
     // ===== Getters & Setters =====
 
     public Integer getJumlahPeserta() {
