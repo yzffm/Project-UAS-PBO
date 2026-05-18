@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import {
-  CalendarDays,
-  Banknote,
-  BarChart3,
-  MapPin,
-  ArrowLeft
-} from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { CalendarDays, Banknote, BarChart3, MapPin, ArrowLeft, Trash2 } from 'lucide-react';
 
 import DayCard from '../components/itinerary/DayCard';
 import BudgetTable from '../components/budget/BudgetTable';
@@ -23,6 +17,20 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 const TripDetailPage = () => {
   const { id } = useParams();
   const { token } = useAuth();
+  const navigate = useNavigate(); // Untuk navigasi balik ke dashboard
+
+  // Fungsi untuk mengeksekusi penghapusan
+  const handleDeleteTrip = async () => {
+    if (window.confirm('Hapus rencana perjalanan ini secara permanen? Semua jadwal dan anggaran di dalamnya akan ikut terhapus dan tidak bisa dikembalikan.')) {
+      try {
+        await tripService.deleteTrip(id, token);
+        alert('Rencana perjalanan berhasil dihapus!');
+        navigate('/dashboard');
+      } catch (err) {
+        alert('Gagal menghapus trip: ' + (err.response?.data?.message || err.message));
+      }
+    }
+  };
 
   const [activeTab, setActiveTab] = useState('itinerary');
   const [tripData, setTripData] = useState(null);
@@ -77,6 +85,12 @@ const TripDetailPage = () => {
 
   const handleAddDay = async () => {
     try {
+      // FIX 1: Validasi batas maksimal hari di frontend
+      if (days.length >= tripData.durasiHari) {
+        alert(`Maksimal jadwal untuk trip ini adalah ${tripData.durasiHari} hari.`);
+        return;
+      }
+
       const nextUrutan = days.length > 0 ? Math.max(...days.map(d => d.urutanHari || d.hariKe || 0)) + 1 : 1;
 
       // Calculate the date based on trip start date + day offset
@@ -91,7 +105,7 @@ const TripDetailPage = () => {
       }, token);
       fetchItinerary();
     } catch (err) {
-      alert('Gagal menambah hari');
+      alert(err.response?.data?.error || 'Gagal menambah hari');
     }
   };
 
@@ -164,7 +178,12 @@ const TripDetailPage = () => {
                 </div>
                 <button
                   onClick={handleAddDay}
-                  className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-blue-100 transition shadow-sm"
+                  disabled={days.length >= tripData.durasiHari}
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm ${days.length >= tripData.durasiHari
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                    }`}
+                  title={days.length >= tripData.durasiHari ? "Kuota hari sudah maksimal" : "Tambah jadwal hari"}
                 >
                   + Tambah Hari
                 </button>

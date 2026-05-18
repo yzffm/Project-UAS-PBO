@@ -11,6 +11,7 @@ import com.travelplanner.repository.JadwalDestinasiRepository;
 import com.travelplanner.repository.PerjalananRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.travelplanner.exception.InvalidInputException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,9 +26,9 @@ public class ItineraryService {
     private final DestinasiRepository destinasiRepository;
 
     public ItineraryService(HariPerjalananRepository hariPerjalananRepository,
-                            PerjalananRepository perjalananRepository,
-                            JadwalDestinasiRepository jadwalDestinasiRepository,
-                            DestinasiRepository destinasiRepository) {
+            PerjalananRepository perjalananRepository,
+            JadwalDestinasiRepository jadwalDestinasiRepository,
+            DestinasiRepository destinasiRepository) {
         this.hariPerjalananRepository = hariPerjalananRepository;
         this.perjalananRepository = perjalananRepository;
         this.jadwalDestinasiRepository = jadwalDestinasiRepository;
@@ -43,6 +44,13 @@ public class ItineraryService {
         Perjalanan perjalanan = perjalananRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip tidak ditemukan"));
 
+        // FIX 2: Validasi Durasi Hari di Backend
+        if (urutanHari > perjalanan.getDurasiHari()) {
+            throw new com.travelplanner.exception.InvalidInputException(
+                    "Tidak dapat menambahkan hari. Maksimal durasi trip adalah " + perjalanan.getDurasiHari()
+                            + " hari.");
+        }
+
         HariPerjalanan hari = new HariPerjalanan();
         hari.setPerjalanan(perjalanan);
         hari.setTanggal(tanggal);
@@ -56,9 +64,12 @@ public class ItineraryService {
     public HariPerjalanan updateDay(Long dayId, LocalDate tanggal, Integer urutanHari, String catatan) {
         HariPerjalanan hari = hariPerjalananRepository.findById(dayId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hari perjalanan tidak ditemukan"));
-        if (tanggal != null) hari.setTanggal(tanggal);
-        if (urutanHari != null) hari.setUrutanHari(urutanHari);
-        if (catatan != null) hari.setCatatan(catatan);
+        if (tanggal != null)
+            hari.setTanggal(tanggal);
+        if (urutanHari != null)
+            hari.setUrutanHari(urutanHari);
+        if (catatan != null)
+            hari.setCatatan(catatan);
         return hariPerjalananRepository.save(hari);
     }
 
@@ -72,20 +83,21 @@ public class ItineraryService {
 
     // UPDATE: Tambah parameter "urutan" dan sesuaikan setter waktu
     @Transactional
-    public JadwalDestinasi addSchedule(Long dayId, Long destinasiId, Integer urutan, LocalTime mulai, LocalTime selesai, String catatan) {
+    public JadwalDestinasi addSchedule(Long dayId, Long destinasiId, Integer urutan, LocalTime mulai, LocalTime selesai,
+            String catatan) {
         HariPerjalanan hari = hariPerjalananRepository.findById(dayId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hari perjalanan tidak ditemukan"));
-        
+
         Destinasi destinasi = destinasiRepository.findById(destinasiId)
                 .orElseThrow(() -> new ResourceNotFoundException("Destinasi tidak ditemukan"));
 
         JadwalDestinasi jadwal = new JadwalDestinasi();
         jadwal.setHariPerjalanan(hari);
         jadwal.setDestinasi(destinasi);
-        
+
         // Penyesuaian dengan setter di JadwalDestinasi buatan lu
-        jadwal.setUrutan(urutan); 
-        jadwal.setWaktuMulai(mulai); 
+        jadwal.setUrutan(urutan);
+        jadwal.setWaktuMulai(mulai);
         jadwal.setWaktuSelesai(selesai);
         jadwal.setCatatan(catatan);
 

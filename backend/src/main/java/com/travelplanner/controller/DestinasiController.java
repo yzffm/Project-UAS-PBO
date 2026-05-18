@@ -18,10 +18,10 @@ public class DestinasiController {
         this.destinasiService = destinasiService;
     }
 
-    // Mendapatkan semua destinasi (Bisa buat filter nanti)
+    // FIX: Menerima param 'tipe' dan meneruskannya ke Service
     @GetMapping
-    public ResponseEntity<List<Destinasi>> getAll() {
-        return ResponseEntity.ok(destinasiService.findAll());
+    public ResponseEntity<List<Destinasi>> getAll(@RequestParam(required = false) String tipe) {
+        return ResponseEntity.ok(destinasiService.findAll(tipe));
     }
 
     // Mencari destinasi berdasarkan ID

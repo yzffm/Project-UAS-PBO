@@ -1,27 +1,35 @@
 import React from 'react';
 
 const StatusBadge = ({ status }) => {
-  // Mapping warna berdasarkan status dari Backend
+  // Mapping label dan warna berdasarkan status dinamis dari Backend
   const statusConfig = {
+    DRAFT: {
+      label: 'Draft',
+      style: 'bg-gray-100 text-gray-500 border-gray-200',
+    },
     PLANNED: {
       label: 'Direncanakan',
       style: 'bg-yellow-50 text-yellow-700 border-yellow-100',
     },
     ONGOING: {
-      label: 'Berlangsung',
-      style: 'bg-green-50 text-green-700 border-green-100',
+      label: 'Sedang Liburan',
+      style: 'bg-blue-50 text-blue-700 border-blue-100',
     },
-    FINISHED: {
+    COMPLETED: {
       label: 'Selesai',
-      style: 'bg-gray-100 text-gray-600 border-gray-200',
+      style: 'bg-green-50 text-green-700 border-green-100', // Warna Hijau untuk trip Selesai
+    },
+    FINISHED: { // Fallback antisipasi
+      label: 'Selesai',
+      style: 'bg-green-50 text-green-700 border-green-100',
     },
   };
 
-  // Fallback jika status tidak dikenal
-  const config = statusConfig[status] || { label: status, style: 'bg-gray-50 text-gray-500 border-gray-100' };
+  // Gunakan fallback ke DRAFT jika status tidak dikenali
+  const config = statusConfig[status] || statusConfig.DRAFT;
 
   return (
-    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${config.style}`}>
+    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border shadow-sm ${config.style}`}>
       {config.label}
     </span>
   );

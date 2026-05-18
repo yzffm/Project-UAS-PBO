@@ -45,8 +45,8 @@ public class AnggaranController {
     public ResponseEntity<AnggaranItem> updateBudgetItem(
             @PathVariable Long tripId,
             @PathVariable Long itemId,
-            @RequestBody AnggaranItem anggaranItem) {
-        return ResponseEntity.ok(anggaranService.updateAnggaran(itemId, anggaranItem));
+            @RequestBody AnggaranRequestDTO dto) { // FIX: Gunakan DTO, bukan class abstract
+        return ResponseEntity.ok(anggaranService.updateAnggaran(itemId, dto));
     }
 
     @DeleteMapping("/{itemId}")

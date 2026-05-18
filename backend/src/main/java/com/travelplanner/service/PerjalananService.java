@@ -13,6 +13,7 @@ import com.travelplanner.model.perjalanan.PerjalananSolo;
 import com.travelplanner.repository.PerjalananRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -70,11 +71,20 @@ public class PerjalananService {
         dto.setDeskripsiTrip(p.getDeskripsiTrip());
         dto.setTanggalMulai(p.getTanggalMulai());
         dto.setTanggalSelesai(p.getTanggalSelesai());
-        dto.setStatus(p.getStatus() != null ? p.getStatus().name() : null);
         dto.setTipePerjalanan(p.getTipePerjalanan());
         dto.setCoverImageUrl(p.getCoverImageUrl());
         dto.setBadgeWarna(p.getBadgeWarna());
         dto.setDurasiHari(p.getDurasiHari());
+        LocalDate today = LocalDate.now();
+        if (p.getTanggalSelesai() != null && today.isAfter(p.getTanggalSelesai())) {
+            dto.setStatus("COMPLETED");
+        } else if (p.getTanggalMulai() != null && today.isBefore(p.getTanggalMulai())) {
+            dto.setStatus("PLANNED");
+        } else if (p.getTanggalMulai() != null && p.getTanggalSelesai() != null) {
+            dto.setStatus("ONGOING");
+        } else {
+            dto.setStatus(p.getStatus() != null ? p.getStatus().name() : "DRAFT");
+        }
 
         if (p.getPemilik() != null) {
             UserResponseDTO pemilikDTO = new UserResponseDTO();

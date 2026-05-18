@@ -58,13 +58,16 @@ public class AnggaranService {
         return anggaranRepository.save(item);
     }
 
-    public AnggaranItem updateAnggaran(Long id, AnggaranItem updatedItem) {
+    public AnggaranItem updateAnggaran(Long id, AnggaranRequestDTO dto) { // FIX: Parameter menjadi DTO
         AnggaranItem existing = getAnggaranById(id);
-        existing.setNamaItem(updatedItem.getNamaItem());
-        existing.setEstimasiHarga(updatedItem.getEstimasiHarga());
-        existing.setHargaAktual(updatedItem.getHargaAktual());
-        existing.setSudahDibayar(updatedItem.getSudahDibayar());
-        existing.setCatatan(updatedItem.getCatatan());
+
+        // Update field menggunakan data dari DTO
+        existing.setNamaItem(dto.getNamaItem());
+        existing.setEstimasiHarga(dto.getEstimasiHarga());
+        existing.setHargaAktual(dto.getHargaAktual());
+        existing.setSudahDibayar(dto.getSudahDibayar());
+        existing.setCatatan(dto.getCatatan());
+
         return anggaranRepository.save(existing);
     }
 

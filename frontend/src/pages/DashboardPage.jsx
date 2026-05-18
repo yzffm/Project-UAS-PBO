@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TripCard from '../components/trip/TripCard';
 import tripService from '../services/tripService';
+import budgetService from '../services/budgetService'; // FIX 1: Tambahkan import budgetService
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
@@ -14,8 +15,28 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
+        // 1. Ambil data list trip dasar
         const data = await tripService.getAllTrips(token);
-        setTrips(Array.isArray(data) ? data : data ? [data] : []);
+        const tripsArray = Array.isArray(data) ? data : data ? [data] : [];
+
+        // 2. FIX 2: Loop semua trip untuk mengambil summary budgetnya masing-masing
+        const tripsWithBudget = await Promise.all(tripsArray.map(async (trip) => {
+          try {
+            // Panggil API summary untuk trip ini
+            const summary = await budgetService.getBudgetSummary(trip.id, token);
+            return {
+              ...trip,
+              // Sisipkan totalEstimasi (atau totalAktual) ke dalam object trip
+              totalAnggaran: summary.totalEstimasi || 0
+            };
+          } catch (err) {
+            // Kalau misal belum ada budget, set 0
+            return { ...trip, totalAnggaran: 0 };
+          }
+        }));
+
+        // 3. Simpan data yang sudah digabung dengan budget ke state
+        setTrips(tripsWithBudget);
       } catch (err) {
         setError(err);
       } finally {
