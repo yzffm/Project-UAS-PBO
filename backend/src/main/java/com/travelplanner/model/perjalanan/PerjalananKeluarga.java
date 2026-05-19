@@ -64,6 +64,23 @@ public class PerjalananKeluarga extends Perjalanan {
         return totalSetelahEfisiensi / totalKeluarga;
     }
 
+    @Override
+    public int getPembagiBiaya() {
+        int dewasa = (this.getJumlahDewasa() != null) ? this.getJumlahDewasa() : 0;
+        int anak = (this.getJumlahAnak() != null) ? this.getJumlahAnak() : 0;
+        int total = dewasa + anak;
+        return total > 0 ? total : 1;
+    }
+
+    @Override
+    public double getFaktorEfisiensiBiaya() {
+        // Logika bisnis: Jika ada Balita atau Lansia, biasanya ada penyesuaian cost
+        // operasional
+        // Di sini kita beri keuntungan flat efisiensi keluarga sebesar 15% (multiplier
+        // 0.85)
+        return 0.85;
+    }
+
     // ===== Getters & Setters =====
 
     public Integer getJumlahDewasa() {

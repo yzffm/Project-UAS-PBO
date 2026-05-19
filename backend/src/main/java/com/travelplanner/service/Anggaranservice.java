@@ -89,22 +89,31 @@ public class AnggaranService {
      * The strategy is selected based on the trip type (SOLO/GRUP/KELUARGA).
      */
     public BudgetSummaryResponseDTO getBudgetSummary(Long tripId, String tipePerjalanan) {
-        List<AnggaranItem> items = anggaranRepository.findByPerjalananId(tripId);
 
+        // FIX 1: Ambil objek Perjalanan dari database (MENGHILANGKAN ERROR MERAH)
+        Perjalanan perjalanan = perjalananService.getTripEntityById(tripId);
+
+        List<AnggaranItem> items = anggaranRepository.findByPerjalananId(tripId);
         BudgetStrategy strategy = budgetStrategyFactory.selectStrategy(tipePerjalanan);
 
-        Double totalEstimasi = strategy.hitungTotalEstimasi(items);
-        Double totalAktual = strategy.hitungTotalAktual(items);
-        Map<String, Double> perKategoriRaw = strategy.hitungPerKategori(items);
+        // Objek 'perjalanan' sekarang sudah ada, error merah akan hilang!
+        Double totalEstimasi = strategy.hitungTotalEstimasi(items, perjalanan);
+        Double totalAktual = strategy.hitungTotalAktual(items, perjalanan);
+        Map<String, Double> perKategoriRaw = strategy.hitungPerKategori(items, perjalanan);
 
         Map<String, BudgetSummaryResponseDTO.CategoryBudget> perKategori = new HashMap<>();
         for (Map.Entry<String, Double> entry : perKategoriRaw.entrySet()) {
             String kategori = entry.getKey();
             Double estimasi = entry.getValue();
+
+            // FIX 2: Perbaiki logika 'aktual' per kategori agar ikut terpengaruh tipe trip
+            // (dibagi rata/efisiensi)
             Double aktual = items.stream()
                     .filter(item -> item.getKategoriAnggaran().equals(kategori))
-                    .mapToDouble(AnggaranItem::getHargaAktual)
+                    .mapToDouble(item -> (item.getHargaAktual() * perjalanan.getFaktorEfisiensiBiaya())
+                            / perjalanan.getPembagiBiaya())
                     .sum();
+
             String icon = items.stream()
                     .filter(item -> item.getKategoriAnggaran().equals(kategori))
                     .findFirst()

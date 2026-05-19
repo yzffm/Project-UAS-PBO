@@ -61,6 +61,16 @@ public class PerjalananGrup extends Perjalanan {
         return totalBiaya / jumlahPeserta;
     }
 
+    @Override
+    public int getPembagiBiaya() {
+        return (this.jumlahPeserta != null && this.jumlahPeserta > 0) ? this.jumlahPeserta : 1;
+    }
+
+    @Override
+    public double getFaktorEfisiensiBiaya() {
+        return 1.0; // Grup umum membayar tarif standar murni
+    }
+
     // ===== Getters & Setters =====
 
     public Integer getJumlahPeserta() {

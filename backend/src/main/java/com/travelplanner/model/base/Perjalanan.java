@@ -151,4 +151,14 @@ public abstract class Perjalanan {
     public void setPemilik(User pemilik) {
         this.pemilik = pemilik;
     }
+
+    // ===== POLYMORPHISM: Logika Bisnis Finansial =====
+    /** Mengembalikan nilai pembagi biaya (jumlah orang yang patungan) */
+    public abstract int getPembagiBiaya();
+
+    /**
+     * Mengembalikan faktor efisiensi/diskon biaya (misal: keluarga dapat diskon 10%
+     * = 0.9)
+     */
+    public abstract double getFaktorEfisiensiBiaya();
 }

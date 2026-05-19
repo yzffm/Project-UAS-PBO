@@ -55,6 +55,16 @@ public class PerjalananSolo extends Perjalanan {
         return totalBiaya;
     }
 
+    @Override
+    public int getPembagiBiaya() {
+        return 1; // Solo trip ditanggung 1 orang
+    }
+
+    @Override
+    public double getFaktorEfisiensiBiaya() {
+        return 1.0; // Tidak ada diskon/efisiensi khusus
+    }
+
     // ===== Getters & Setters =====
 
     public String getMoodPerjalanan() {
