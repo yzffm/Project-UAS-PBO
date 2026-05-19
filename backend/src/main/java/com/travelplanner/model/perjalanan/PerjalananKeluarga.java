@@ -67,9 +67,8 @@ public class PerjalananKeluarga extends Perjalanan {
     @Override
     public int getPembagiBiaya() {
         int dewasa = (this.getJumlahDewasa() != null) ? this.getJumlahDewasa() : 0;
-        int anak = (this.getJumlahAnak() != null) ? this.getJumlahAnak() : 0;
-        int total = dewasa + anak;
-        return total > 0 ? total : 1;
+        // Hanya membagi biaya aktual dengan jumlah orang dewasa (anak-anak gratis/ditanggung)
+        return dewasa > 0 ? dewasa : 1;
     }
 
     @Override

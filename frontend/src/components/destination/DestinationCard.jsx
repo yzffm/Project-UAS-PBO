@@ -44,7 +44,7 @@ const DestinationCard = ({ destination }) => {
 
         <div className="mt-auto flex justify-between items-end">
           <div>
-            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter leading-none mb-1">Mulai Dari</p>
+            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter leading-none mb-1" title="Estimasi rata-rata harga tiket masuk atau biaya dasar destinasi">Harga Tiket/Entry</p>
             <p className="text-sm font-extrabold text-blue-600">{formatCurrency(estimasiBiaya)}</p>
           </div>
           <span className="text-xs font-bold text-gray-300 group-hover:text-blue-500 transition-colors">

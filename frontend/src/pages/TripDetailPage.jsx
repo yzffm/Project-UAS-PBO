@@ -287,16 +287,31 @@ const TripDetailPage = () => {
                       <span className="font-bold">Rp {budgetSummary.totalEstimasi?.toLocaleString('id-ID')}</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                      <span className="text-gray-600 font-medium">Aktual</span>
+                      <span className="text-gray-600 font-medium">Aktual (Total)</span>
                       <span className="font-bold">Rp {budgetSummary.totalAktual?.toLocaleString('id-ID')}</span>
                     </div>
+
+                    {(tripData?.tipePerjalanan === 'Group Trip' || tripData?.tipePerjalanan === 'Family Trip') && (
+                      <div className="flex justify-between items-center p-3 bg-blue-50 border border-blue-100 rounded-xl shadow-sm">
+                        <span className="text-blue-800 font-bold">Total Bayar (Per Orang)</span>
+                        <span className="font-extrabold text-blue-700">
+                          Rp {Math.round((budgetSummary.totalAktual || 0) / (tripData?.jumlahPeserta || tripData?.jumlahDewasa || 1)).toLocaleString('id-ID')}
+                        </span>
+                      </div>
+                    )}
+
                     <div className={`flex justify-between items-center p-4 rounded-xl font-bold ${budgetSummary.statusBudget === 'OVER_BUDGET' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
                       }`}>
                       <span>Selisih</span>
                       <span>Rp {Math.abs(budgetSummary.selisih || 0).toLocaleString('id-ID')}</span>
                     </div>
                     <div className="mt-4 p-4 border border-blue-100 bg-blue-50 rounded-xl text-blue-800 text-sm">
-                      <strong>Tipe Perjalanan:</strong> {tripData?.tipePerjalanan}. <strong>Kelas Anggaran:</strong> {tripData?.kelasAnggaran}.
+                      <p className="mb-1"><strong>Tipe Perjalanan:</strong> {tripData?.tipePerjalanan}. <strong>Kelas Anggaran:</strong> {tripData?.kelasAnggaran}.</p>
+                      {(tripData?.tipePerjalanan === 'Group Trip' || tripData?.tipePerjalanan === 'Family Trip') && (
+                        <p className="text-xs text-blue-600 mt-2 font-medium">
+                          * Karena ini adalah perjalanan Grup/Keluarga, sistem otomatis menghitung <b>Total Bayar (Per Orang)</b> dengan membagi total pengeluaran aktual dengan jumlah {tripData?.tipePerjalanan === 'Family Trip' ? `Orang Dewasa (${tripData?.jumlahDewasa || 1} orang)` : `Peserta (${tripData?.jumlahPeserta || 1} orang)`}.
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}

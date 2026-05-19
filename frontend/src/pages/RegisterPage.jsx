@@ -29,7 +29,7 @@ const RegisterPage = () => {
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
           <Link to="/" className="inline-block text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-6">
-            TripPlan.io
+            TravelPlanner.ai
           </Link>
           <h2 className="text-3xl font-bold text-gray-900">Buat Akun</h2>
           <p className="text-gray-500 mt-2">Gabung sekarang dan mulai petualanganmu</p>

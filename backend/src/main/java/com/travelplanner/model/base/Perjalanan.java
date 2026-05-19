@@ -152,6 +152,14 @@ public abstract class Perjalanan {
         this.pemilik = pemilik;
     }
 
+    public List<HariPerjalanan> getHariPerjalananList() {
+        return hariPerjalananList;
+    }
+
+    public void setHariPerjalananList(List<HariPerjalanan> hariPerjalananList) {
+        this.hariPerjalananList = hariPerjalananList;
+    }
+
     // ===== POLYMORPHISM: Logika Bisnis Finansial =====
     /** Mengembalikan nilai pembagi biaya (jumlah orang yang patungan) */
     public abstract int getPembagiBiaya();

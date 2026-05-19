@@ -107,11 +107,9 @@ public class AnggaranService {
             Double estimasi = entry.getValue();
 
             // FIX 2: Perbaiki logika 'aktual' per kategori agar ikut terpengaruh tipe trip
-            // (dibagi rata/efisiensi)
             Double aktual = items.stream()
                     .filter(item -> item.getKategoriAnggaran().equals(kategori))
-                    .mapToDouble(item -> (item.getHargaAktual() * perjalanan.getFaktorEfisiensiBiaya())
-                            / perjalanan.getPembagiBiaya())
+                    .mapToDouble(AnggaranItem::getHargaAktual)
                     .sum();
 
             String icon = items.stream()

@@ -12,9 +12,12 @@ import com.travelplanner.model.perjalanan.PerjalananKeluarga;
 import com.travelplanner.model.perjalanan.PerjalananSolo;
 import com.travelplanner.repository.PerjalananRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import com.travelplanner.model.HariPerjalanan;
+import com.travelplanner.model.JadwalDestinasi;
 
 @Service
 public class PerjalananService {
@@ -75,6 +78,7 @@ public class PerjalananService {
         dto.setCoverImageUrl(p.getCoverImageUrl());
         dto.setBadgeWarna(p.getBadgeWarna());
         dto.setDurasiHari(p.getDurasiHari());
+
         LocalDate today = LocalDate.now();
         if (p.getTanggalSelesai() != null && today.isAfter(p.getTanggalSelesai())) {
             dto.setStatus("COMPLETED");
@@ -108,6 +112,47 @@ public class PerjalananService {
             dto.setAdaLansia(keluarga.getAdaLansia());
             dto.setAdaBalita(keluarga.getAdaBalita());
         }
+
+        String destinasiUtamaFinal = "Belum ada destinasi";
+        LocalDate hariIni = LocalDate.now();
+
+        // FIX: Ubah 'perjalanan' menjadi 'p' sesuai dengan parameter method
+        List<HariPerjalanan> jadwalHariHari = p.getHariPerjalananList();
+        if (jadwalHariHari != null && !jadwalHariHari.isEmpty()) {
+            // 1. LOGIKA USER: Cek apakah hari ini ada jadwal kunjungan
+            Optional<JadwalDestinasi> jadwalHariIni = jadwalHariHari.stream()
+                    .filter(h -> hariIni.equals(h.getTanggal()))
+                    .flatMap(h -> h.getJadwalList().stream())
+                    .findFirst();
+
+            if (jadwalHariIni.isPresent()) {
+                // Jika sedang trip hari ini, tampilkan destinasi real-time
+                destinasiUtamaFinal = "📍 Hari ini: " + jadwalHariIni.get().getDestinasi().getNama();
+            } else {
+                // 2. FALLBACK BEST PRACTICE: Ambil destinasi pertama dari hari pertama sebagai
+                // Cover
+                Optional<JadwalDestinasi> destinasiPertama = jadwalHariHari.stream()
+                        .min(Comparator.comparing(HariPerjalanan::getTanggal))
+                        .flatMap(h -> h.getJadwalList().stream().findFirst());
+
+                if (destinasiPertama.isPresent()) {
+                    // Hitung total seluruh destinasi di trip ini
+                    long totalDestinasi = jadwalHariHari.stream()
+                            .mapToLong(h -> h.getJadwalList().size())
+                            .sum();
+
+                    String namaDestinasiAwal = destinasiPertama.get().getDestinasi().getNama();
+
+                    if (totalDestinasi > 1) {
+                        destinasiUtamaFinal = namaDestinasiAwal + " & " + (totalDestinasi - 1) + " lainnya";
+                    } else {
+                        destinasiUtamaFinal = namaDestinasiAwal;
+                    }
+                }
+            }
+        }
+
+        dto.setDestinasiUtama(destinasiUtamaFinal);
 
         return dto;
     }

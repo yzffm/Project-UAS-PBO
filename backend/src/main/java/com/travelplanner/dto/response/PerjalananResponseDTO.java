@@ -15,6 +15,7 @@ public class PerjalananResponseDTO {
     private String badgeWarna;
     private Long durasiHari;
     private UserResponseDTO pemilik;
+    private String destinasiUtama;
 
     // PerjalananSolo fields
     private String moodPerjalanan;
@@ -193,5 +194,13 @@ public class PerjalananResponseDTO {
 
     public void setAdaBalita(Boolean adaBalita) {
         this.adaBalita = adaBalita;
+    }
+
+    public String getDestinasiUtama() {
+        return destinasiUtama;
+    }
+
+    public void setDestinasiUtama(String destinasiUtama) {
+        this.destinasiUtama = destinasiUtama;
     }
 }

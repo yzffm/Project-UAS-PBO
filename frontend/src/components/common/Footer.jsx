@@ -22,7 +22,7 @@ const Footer = () => {
                 <MapIcon className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                TripPlan.io
+                TravelPlanner.ai
               </span>
             </Link>
             <p className="mt-4 text-gray-500 text-sm leading-relaxed">
@@ -43,7 +43,7 @@ const Footer = () => {
                 <Link to="/destinations" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">Eksplorasi Destinasi</Link>
               </li>
               <li>
-                <Link to="/create-trip" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">Buat Trip Baru</Link>
+                <Link to="/trips/new" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">Buat Trip Baru</Link>
               </li>
             </ul>
           </div>
@@ -56,7 +56,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-gray-500">
                 <EnvelopeIcon className="h-4 w-4 text-blue-500" />
-                support@tripplan.io
+                support@travelplanner.ai
               </li>
               <li className="flex items-center gap-2 text-sm text-gray-500">
                 <PhoneIcon className="h-4 w-4 text-blue-500" />
@@ -92,7 +92,7 @@ const Footer = () => {
         {/* Baris Bawah: Copyright */}
         <div className="mt-12 pt-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-400">
-            &copy; {currentYear} TripPlan.io - Tugas Besar Kelompok Pemrograman Berorientasi Objek.
+            &copy; {currentYear} TravelPlanner.ai - Tugas Besar Kelompok Pemrograman Berorientasi Objek.
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-gray-400 hover:text-blue-600 text-xs">Privacy Policy</a>

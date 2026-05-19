@@ -40,7 +40,7 @@ const Navbar = () => {
                 <MapIcon className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-                TripPlan.io
+                TravelPlanner.ai
               </span>
             </Link>
 

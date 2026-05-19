@@ -4,32 +4,32 @@ import org.springframework.stereotype.Component;
 
 /**
  * Factory that selects the correct BudgetStrategy based on trip type.
- * SOLO      → EconomyStrategy  (standard, no markup)
- * GRUP      → BusinessStrategy (10% buffer for group coordination)
- * KELUARGA  → LuxuryStrategy   (20% buffer for family needs)
+ * SOLO      → StandardBudgetStrategy (standard calculation)
+ * GRUP      → GrupBudgetStrategy     (divides cost by participants)
+ * KELUARGA  → KeluargaBudgetStrategy (20% buffer for family needs)
  */
 @Component
 public class BudgetStrategyFactory {
 
-    private final EconomyStrategy economyStrategy;
-    private final BusinessStrategy businessStrategy;
-    private final LuxuryStrategy luxuryStrategy;
+    private final StandardBudgetStrategy standardStrategy;
+    private final GrupBudgetStrategy grupStrategy;
+    private final KeluargaBudgetStrategy keluargaStrategy;
 
-    public BudgetStrategyFactory(EconomyStrategy economyStrategy,
-                                  BusinessStrategy businessStrategy,
-                                  LuxuryStrategy luxuryStrategy) {
-        this.economyStrategy = economyStrategy;
-        this.businessStrategy = businessStrategy;
-        this.luxuryStrategy = luxuryStrategy;
+    public BudgetStrategyFactory(StandardBudgetStrategy standardStrategy,
+                                 GrupBudgetStrategy grupStrategy,
+                                 KeluargaBudgetStrategy keluargaStrategy) {
+        this.standardStrategy = standardStrategy;
+        this.grupStrategy = grupStrategy;
+        this.keluargaStrategy = keluargaStrategy;
     }
 
     public BudgetStrategy selectStrategy(String tipePerjalanan) {
-        if (tipePerjalanan == null) return economyStrategy;
+        if (tipePerjalanan == null) return standardStrategy;
 
         return switch (tipePerjalanan.toUpperCase()) {
-            case "GRUP", "BUSINESS" -> businessStrategy;
-            case "KELUARGA", "LUXURY" -> luxuryStrategy;
-            default -> economyStrategy; // SOLO, ECONOMY, and any unknown type
+            case "GRUP" -> grupStrategy;
+            case "KELUARGA" -> keluargaStrategy;
+            default -> standardStrategy; // SOLO and any unknown type
         };
     }
 }

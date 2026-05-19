@@ -5,6 +5,7 @@ import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 import LandingPage from './pages/LandingPage';
+import GroupInfoPage from './pages/GroupInfoPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -27,6 +28,7 @@ const AppContent = () => {
       <main className="flex-grow bg-gray-50">
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/group-info" element={<GroupInfoPage />} />
 
           <Route path="/login" element={
             <PublicOnlyRoute>
