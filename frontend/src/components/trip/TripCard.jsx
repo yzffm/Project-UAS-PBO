@@ -20,7 +20,7 @@ const TripCard = ({ trip }) => {
   };
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div className="group bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg shadow-black/5 hover:bg-white/80 hover:shadow-xl hover:shadow-blue-500/10 rounded-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
       <div className="p-6">
         {/* Header: Tipe & Status */}
         <div className="flex justify-between items-start mb-4">
@@ -63,7 +63,7 @@ const TripCard = ({ trip }) => {
         {/* Action Button */}
         <Link
           to={`/trips/${id}`}
-          className="mt-4 w-full flex items-center justify-center gap-2 bg-gray-50 group-hover:bg-blue-600 group-hover:text-white text-gray-600 py-3 rounded-xl font-bold text-sm transition-all"
+          className="mt-4 w-full flex items-center justify-center gap-2 bg-white/60 backdrop-blur-sm border border-gray-200/60 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:shadow-lg group-hover:shadow-blue-500/25 group-hover:border-transparent group-hover:text-white text-gray-600 py-3 rounded-xl font-bold text-sm transition-all"
         >
           Lihat Detail Rencana
           <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

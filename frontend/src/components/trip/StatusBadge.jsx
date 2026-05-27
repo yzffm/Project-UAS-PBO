@@ -5,23 +5,23 @@ const StatusBadge = ({ status }) => {
   const statusConfig = {
     DRAFT: {
       label: 'Draft',
-      style: 'bg-gray-100 text-gray-500 border-gray-200',
+      style: 'bg-gray-500/10 text-gray-600 border-gray-500/20 backdrop-blur-sm',
     },
     PLANNED: {
       label: 'Direncanakan',
-      style: 'bg-yellow-50 text-yellow-700 border-yellow-100',
+      style: 'bg-yellow-500/10 text-yellow-700 border-yellow-500/20 backdrop-blur-sm',
     },
     ONGOING: {
       label: 'Sedang Liburan',
-      style: 'bg-blue-50 text-blue-700 border-blue-100',
+      style: 'bg-blue-500/10 text-blue-700 border-blue-500/20 backdrop-blur-sm',
     },
     COMPLETED: {
       label: 'Selesai',
-      style: 'bg-green-50 text-green-700 border-green-100', // Warna Hijau untuk trip Selesai
+      style: 'bg-green-500/10 text-green-700 border-green-500/20 backdrop-blur-sm',
     },
     FINISHED: { // Fallback antisipasi
       label: 'Selesai',
-      style: 'bg-green-50 text-green-700 border-green-100',
+      style: 'bg-green-500/10 text-green-700 border-green-500/20 backdrop-blur-sm',
     },
   };
 

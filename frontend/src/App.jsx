@@ -6,6 +6,7 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 
 import LandingPage from './pages/LandingPage';
 import GroupInfoPage from './pages/GroupInfoPage';
+import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -29,6 +30,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/group-info" element={<GroupInfoPage />} />
+          <Route path="/about" element={<AboutPage />} />
 
           <Route path="/login" element={
             <PublicOnlyRoute>

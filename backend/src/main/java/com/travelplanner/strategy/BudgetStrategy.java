@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * STRATEGY PATTERN: Interface for budget calculation algorithms.
- * Each trip type gets a different strategy with different buffer calculations.
+ * Each trip type gets a different strategy with different calculations.
  */
 public interface BudgetStrategy {
     Double hitungTotalEstimasi(List<AnggaranItem> items, Perjalanan perjalanan);

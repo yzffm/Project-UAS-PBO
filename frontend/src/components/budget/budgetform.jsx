@@ -63,16 +63,18 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onClick={onClose}></div>
 
       {/* Modal Content */}
-      <div className="relative bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in duration-200">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+      <div className="relative glass-modal rounded-3xl p-6 w-full max-w-md shadow-2xl shadow-blue-900/20 overflow-hidden animate-in zoom-in duration-200">
+        <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/40">
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Banknote className="h-6 w-6 text-blue-600" />
+            <div className="bg-gradient-to-br from-blue-100 to-indigo-100 p-2 rounded-xl border border-white/60 shadow-sm">
+              <Banknote className="h-6 w-6 text-blue-600" />
+            </div>
             {itemToEdit ? 'Edit Anggaran' : 'Tambah Anggaran'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 p-2 hover:bg-white/50 rounded-xl transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -87,7 +89,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               value={formData.kategori}
               onChange={handleChange}
               disabled={!!itemToEdit} // Do not allow changing category for existing items since backend factory uses it
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium disabled:opacity-50"
+              className="w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-400 outline-none font-medium disabled:opacity-50"
             >
               <option value="TRANSPORTASI">Transportasi</option>
               <option value="AKOMODASI">Akomodasi</option>
@@ -107,7 +109,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               value={formData.namaItem}
               onChange={handleChange}
               placeholder="Contoh: Tiket Pesawat PP"
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition-all"
             />
           </div>
 
@@ -123,7 +125,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
                 value={formData.estimasiHarga}
                 onChange={handleChange}
                 placeholder="0"
-                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition-all"
               />
             </div>
             <div>
@@ -136,7 +138,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
                 value={formData.hargaAktual}
                 onChange={handleChange}
                 placeholder="0"
-                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-400 outline-none transition-all"
               />
             </div>
           </div>
@@ -149,7 +151,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               name="catatan"
               value={formData.catatan}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none h-20"
+              className="w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-400 outline-none resize-none h-20 transition-all"
             ></textarea>
           </div>
 
@@ -161,7 +163,7 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               checked={formData.sudahDibayar}
               onChange={handleChange}
               disabled={!formData.hargaAktual || parseFloat(formData.hargaAktual) <= 0}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-4 h-4 text-blue-600 bg-white/50 border-white/60 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <label htmlFor="sudahDibayar" className="text-sm font-bold text-gray-700 cursor-pointer">
               Tandai Lunas (Sudah Dibayar)
@@ -173,14 +175,14 @@ const BudgetForm = ({ tripId, itemToEdit, onClose, onSuccess }) => {
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 py-3.5 border border-gray-200 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors"
+              className="flex-1 py-3.5 btn-secondary rounded-xl font-bold transition-all"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-colors disabled:opacity-70"
+              className="flex-1 py-3.5 btn-primary rounded-xl font-bold transition-all disabled:opacity-70"
             >
               {loading ? 'Menyimpan...' : (itemToEdit ? 'Simpan' : 'Tambah')}
             </button>

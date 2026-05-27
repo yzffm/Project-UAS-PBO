@@ -1,19 +1,56 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Users, User, ArrowRight, ShieldCheck, Mail, Database } from 'lucide-react';
+import { Users, User, ArrowRight, Code2, Palette, Database, Server, Layout, GitBranch, FileCode, Video } from 'lucide-react';
 
 const GroupInfoPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   const members = [
-    { name: 'Yusuf Maulana Arrosyid', id: '25051204426', role: 'Developer' },
-    { name: 'Reivandani Aji Prakoso', id: '25051204422', role: 'Developer' },
-    { name: 'Ayesha Humayra Nadra Rafianti', id: '25051204430', role: 'Developer' },
-    { name: 'Daffa Maulana Putra Hanayu', id: '25051204425', role: 'Developer' },
-    { name: 'Rendy Nur Jamal Prasetyo', id: '25051204435', role: 'Developer' },
-    { name: 'Celvin Saputra Pratama', id: '25051204439', role: 'Developer' },
-    { name: 'Siska Nur Fauziah', id: '25051204440', role: 'Developer' },
+    { 
+      name: 'Yusuf Maulana Arrosyid', id: '25051204426', photo: '/images/team/yusuf.jpg',
+      roles: [
+        { label: 'Lead Developer', icon: Code2 },
+        { label: 'Full Stack Developer', icon: Server },
+        { label: 'Documentation', icon: Users }
+      ]
+    },
+    { 
+      name: 'Reivandani Aji Prakoso', id: '25051204422', photo: '/images/team/reivandani.png',
+      roles: [
+        { label: 'Frontend Developer', icon: Layout },
+        { label: 'Documentation', icon: Users }
+      ]
+    },
+    { 
+      name: 'Ayesha Humayra Nadra Rafianti', id: '25051204430', photo: '/images/team/ayesha.png',
+      roles: [
+        { label: 'Frontend Developer', icon: Layout },
+        { label: 'Laporan', icon: FileCode }
+      ]
+    },
+    { 
+      name: 'Daffa Maulana Putra Hanayu', id: '25051204425', photo: '/images/team/daffa.png',
+      roles: [
+        { label: 'Backend Developer', icon: Database },
+        { label: 'Video Editing', icon: Video }
+      ]
+    },
+    { 
+      name: 'Rendy Nur Jamal Prasetyo', id: '25051204435', photo: '/images/team/rendy.png',
+      roles: [{ label: 'Backend Developer', icon: Database }]
+    },
+    { 
+      name: 'Celvin Saputra Pratama', id: '25051204439', photo: '/images/team/celvin.png',
+      roles: [{ label: 'Frontend Developer', icon: Layout }]
+    },
+    { 
+      name: 'Siska Nur Fauziah', id: '25051204440', photo: '/images/team/siska.png',
+      roles: [
+        { label: 'Frontend Developer', icon: Layout },
+        { label: 'Laporan', icon: FileCode }
+      ]
+    },
   ];
 
   const handleContinue = () => {
@@ -24,12 +61,78 @@ const GroupInfoPage = () => {
     }
   };
 
+  // Split members: first row (4), second row (3 centered)
+  const firstRow = members.slice(0, 4);
+  const secondRow = members.slice(4);
+
+  const renderCard = (member, index) => {
+    return (
+      <div
+        key={index}
+        className="group w-full sm:w-[calc(50%-1rem)] lg:w-[260px] glass-card rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10"
+      >
+        {/* Gradient Banner */}
+        <div className="h-28 bg-gradient-to-br from-blue-500 to-indigo-600 relative">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(255,255,255,0.15),transparent)]"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white/10 to-transparent"></div>
+
+          {/* Avatar */}
+          <div className="absolute -bottom-12 inset-x-0 flex justify-center">
+            <div className="w-24 h-24 bg-white rounded-full p-1 shadow-lg shadow-blue-500/20 border-4 border-white">
+              {member.photo ? (
+                <img
+                  src={member.photo}
+                  alt={member.name}
+                  className="w-full h-full rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-50 rounded-full flex items-center justify-center text-gray-300 group-hover:from-blue-50 group-hover:to-indigo-50 group-hover:text-blue-400 transition-all duration-300">
+                  <User size={40} strokeWidth={1.5} />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="pt-16 pb-8 px-5 text-center space-y-3">
+          <h3 className="text-base font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors min-h-[2.5rem] flex items-center justify-center">
+            {member.name}
+          </h3>
+          <p className="text-xs font-semibold text-gray-400 tracking-widest uppercase">
+            {member.id}
+          </p>
+          <div className="pt-1 flex flex-col items-center gap-2">
+            {member.roles.map((role, roleIdx) => {
+              const RoleIcon = role.icon;
+              return (
+                <span 
+                  key={roleIdx} 
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-blue-50/80 text-blue-700 border border-blue-100/60 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300"
+                >
+                  <RoleIcon size={12} />
+                  {role.label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen app-bg py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Decorative background blobs */}
+      <div className="absolute top-[-5%] left-[-5%] w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+      <div className="absolute top-[40%] right-[-5%] w-96 h-96 bg-indigo-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute bottom-[10%] left-[30%] w-72 h-72 bg-purple-300/15 rounded-full mix-blend-multiply filter blur-3xl opacity-60"></div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Hero — NOT CHANGED */}
         <div className="text-center mb-16 space-y-4">
           <div className="flex justify-center mb-4">
-            <div className="bg-blue-100 p-4 rounded-full shadow-inner shadow-blue-200">
+            <div className="bg-white/50 backdrop-blur-md p-4 rounded-full shadow-inner shadow-blue-200/50 border border-white/60">
               <Users className="w-12 h-12 text-blue-600" />
             </div>
           </div>
@@ -41,46 +144,24 @@ const GroupInfoPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
-          {members.map((member, index) => (
-            <div 
-              key={index}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-gray-100 group"
-            >
-              <div className="h-24 bg-gradient-to-r from-blue-500 to-indigo-500 relative">
-                <div className="absolute -bottom-10 inset-x-0 flex justify-center">
-                  <div className="w-20 h-20 bg-white rounded-full p-1.5 shadow-md">
-                    <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
-                      <User size={36} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="pt-14 pb-8 px-6 text-center space-y-2">
-                <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
-                  {member.name}
-                </h3>
-                <p className="text-sm font-semibold text-gray-500 tracking-wider">
-                  NIM: {member.id}
-                </p>
-                <div className="pt-2">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    {member.role}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* First Row — 4 cards */}
+        <div className="flex flex-wrap justify-center gap-6 mb-6">
+          {firstRow.map((member, index) => renderCard(member, index))}
         </div>
 
+        {/* Second Row — 3 cards, centered */}
+        <div className="flex flex-wrap justify-center gap-6 mb-16">
+          {secondRow.map((member, index) => renderCard(member, index + 4))}
+        </div>
+
+        {/* CTA Button */}
         <div className="flex justify-center">
           <button
             onClick={handleContinue}
-            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-full overflow-hidden shadow-lg shadow-blue-300 hover:shadow-xl hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="group relative inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-full overflow-hidden focus:outline-none focus:ring-4 focus:ring-blue-300/50 hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105 transition-all duration-300"
           >
             <span className="relative z-10">Lanjutkan ke Aplikasi</span>
-            <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform" />
-            <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+            <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

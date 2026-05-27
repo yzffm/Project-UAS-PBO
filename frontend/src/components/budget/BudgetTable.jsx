@@ -17,10 +17,10 @@ const BudgetTable = ({ items = [], onDelete, onEdit }) => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-2xl border border-white/60 shadow-sm glass-card">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-100">
+          <tr className="bg-blue-50/50 backdrop-blur-sm border-b border-white/40">
             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Kategori</th>
             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Item</th>
             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Estimasi</th>
@@ -29,12 +29,12 @@ const BudgetTable = ({ items = [], onDelete, onEdit }) => {
             <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-white/40">
           {items.length > 0 ? (
             items.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={item.id} className="hover:bg-white/40 transition-colors backdrop-blur-sm">
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider ${getCategoryStyle(item.kategoriAnggaran || item.kategori)}`}>
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider backdrop-blur-sm ${getCategoryStyle(item.kategoriAnggaran || item.kategori)}`}>
                     {item.kategoriAnggaran || item.kategori}
                   </span>
                 </td>
@@ -50,11 +50,11 @@ const BudgetTable = ({ items = [], onDelete, onEdit }) => {
                 </td>
                 <td className="px-6 py-4 text-center">
                   {item.sudahDibayar ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-green-700 bg-green-100/80 backdrop-blur-sm px-2 py-1 rounded-md border border-green-200/50">
                       <CheckCircle className="w-4 h-4 fill-green-600 text-white" /> Lunas
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-md">
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-orange-700 bg-orange-100/80 backdrop-blur-sm px-2 py-1 rounded-md border border-orange-200/50">
                       <Circle className="w-4 h-4" /> Belum
                     </span>
                   )}
@@ -63,14 +63,14 @@ const BudgetTable = ({ items = [], onDelete, onEdit }) => {
                   <div className="flex justify-center space-x-2">
                     <button 
                       onClick={() => onEdit(item)}
-                      className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                      className="p-1.5 text-blue-500 hover:bg-blue-100/80 rounded-lg transition-colors backdrop-blur-sm"
                       title="Edit"
                     >
                       <Edit className="h-5 w-5" />
                     </button>
                     <button 
                       onClick={() => onDelete(item.id)}
-                      className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50/80 rounded-lg transition-colors backdrop-blur-sm"
                       title="Hapus"
                     >
                       <Trash2 className="h-5 w-5" />
@@ -89,7 +89,7 @@ const BudgetTable = ({ items = [], onDelete, onEdit }) => {
         </tbody>
         {items.length > 0 && (
           <tfoot>
-            <tr className="bg-blue-50/50 border-t border-blue-100">
+            <tr className="bg-blue-50/60 backdrop-blur-md border-t border-blue-200/50">
               <td colSpan="2" className="px-6 py-4 text-right text-gray-700 font-bold uppercase text-xs tracking-wider">Total:</td>
               <td className="px-6 py-4 text-gray-700 font-bold text-sm">
                 {formatCurrency(totalEstimasi)}

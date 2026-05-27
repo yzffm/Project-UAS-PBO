@@ -49,10 +49,10 @@ const DayCard = ({ day, tripId, onUpdate }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-      <div className="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
+    <div className="glass-card rounded-2xl overflow-hidden mb-6">
+      <div className="bg-blue-50/50 backdrop-blur-sm px-6 py-4 border-b border-blue-100/50 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="bg-blue-600 text-white p-2.5 rounded-xl shadow-sm">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-blue-500/25">
             <Calendar className="h-5 w-5" />
           </div>
           <div>
@@ -64,14 +64,14 @@ const DayCard = ({ day, tripId, onUpdate }) => {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center space-x-1 px-3 py-1.5 bg-white text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg border border-blue-200 transition-colors shadow-sm"
+            className="flex items-center space-x-1 px-3 py-1.5 btn-secondary text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg transition-colors"
           >
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">Tambah Destinasi</span>
           </button>
           <button
             onClick={handleDeleteDay}
-            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50/80 rounded-lg transition-colors"
             title="Hapus Hari"
           >
             <Trash2 className="h-5 w-5" />
@@ -82,10 +82,10 @@ const DayCard = ({ day, tripId, onUpdate }) => {
       <div className="p-6">
         {/* FIX: Mengubah listJadwal menjadi jadwalList sesuai API response */}
         {day.jadwalList && day.jadwalList.length > 0 ? (
-          <div className="relative border-l-2 border-dashed border-blue-200 ml-4 space-y-6">
+          <div className="relative border-l-2 border-dashed border-blue-200/60 ml-4 space-y-6">
             {day.jadwalList.map((item, index) => (
               <div key={item.id || index} className="relative pl-8">
-                <div className="absolute -left-[11px] top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow-sm"></div>
+                <div className="absolute -left-[11px] top-1.5 w-5 h-5 bg-blue-500 rounded-full border-4 border-white/80 backdrop-blur-sm shadow-sm"></div>
                 <ScheduleItem
                   item={item}
                   onEdit={(sch) => { setEditingSchedule(sch); setShowAddModal(true); }}
@@ -95,11 +95,11 @@ const DayCard = ({ day, tripId, onUpdate }) => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+          <div className="text-center py-10 bg-gray-50/50 backdrop-blur-sm rounded-xl border border-dashed border-gray-200/80">
             <p className="text-gray-400 font-medium">Belum ada agenda untuk hari ini.</p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="mt-3 text-sm font-bold text-blue-600 hover:text-blue-800"
+              className="mt-3 text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
             >
               + Susun Jadwal
             </button>

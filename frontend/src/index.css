@@ -16,20 +16,60 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light Theme */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1b4b;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6366f1;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #818cf8;
+  background: #94a3b8;
+}
+
+/* UI Transformation Token Utilities */
+@layer components {
+  /* Glass Cards */
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg shadow-black/5;
+  }
+  .glass-card-hover {
+    @apply hover:bg-white/80 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300;
+  }
+  
+  /* Glass Modal */
+  .glass-modal {
+    @apply bg-white/90 backdrop-blur-2xl border border-white/50 shadow-2xl;
+  }
+  
+  /* Glass Inputs */
+  .glass-input {
+    @apply bg-white/50 backdrop-blur-sm border border-gray-200/60 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all;
+  }
+  
+  /* Glass Navbar */
+  .glass-nav {
+    @apply bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-sm;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] transition-all;
+  }
+  .btn-secondary {
+    @apply bg-white/60 backdrop-blur-sm border border-gray-200/60 hover:bg-white/80 hover:shadow-md transition-all;
+  }
+
+  /* App Background */
+  .app-bg {
+    @apply bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/60 min-h-screen;
+  }
 }

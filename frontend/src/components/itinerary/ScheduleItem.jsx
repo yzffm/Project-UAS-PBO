@@ -11,9 +11,9 @@ const ScheduleItem = ({ item, onDelete, onEdit }) => {
   };
 
   return (
-    <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all">
+    <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 glass-card p-5 rounded-2xl glass-card-hover">
       {/* Waktu */}
-      <div className="min-w-[80px] text-center bg-gray-50 py-2 px-3 rounded-xl border border-gray-100">
+      <div className="min-w-[80px] text-center bg-gray-50/50 py-2 px-3 rounded-xl border border-gray-100/50 backdrop-blur-sm">
         {/* FIX: jamMulai -> waktuMulai dan jamSelesai -> waktuSelesai */}
         <p className="text-sm font-black text-gray-900">{formatTime(item.waktuMulai)}</p>
         <div className="flex items-center justify-center my-0.5">
@@ -27,7 +27,7 @@ const ScheduleItem = ({ item, onDelete, onEdit }) => {
       {/* Konten Utama */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1.5">
-          <span className="text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider bg-blue-100 text-blue-700">
+          <span className="text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider bg-blue-100/80 text-blue-700 backdrop-blur-sm">
             {destinasi.kategori || 'Destinasi'}
           </span>
           <h4 className="font-extrabold text-gray-900 text-base truncate">{destinasi.nama || 'Nama Tidak Diketahui'}</h4>
@@ -46,7 +46,7 @@ const ScheduleItem = ({ item, onDelete, onEdit }) => {
         </div>
 
         {item.catatan && (
-          <p className="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-100 italic">
+          <p className="mt-2 text-xs text-gray-500 bg-gray-50/50 p-2 rounded-lg border border-gray-100/50 italic backdrop-blur-sm">
             "{item.catatan}"
           </p>
         )}
@@ -56,14 +56,14 @@ const ScheduleItem = ({ item, onDelete, onEdit }) => {
       <div className="flex flex-col gap-2 shrink-0">
         <button
           onClick={() => onEdit(item)}
-          className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+          className="p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition-colors backdrop-blur-sm"
           title="Edit Jadwal"
         >
           <Edit2 size={18} />
         </button>
         <button
           onClick={() => onDelete(item.id)}
-          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50/80 rounded-xl transition-colors backdrop-blur-sm"
           title="Hapus Jadwal"
         >
           <Trash2 size={18} />

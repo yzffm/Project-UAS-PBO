@@ -23,11 +23,11 @@ const TripTypeSelector = ({ formData, setFormData }) => {
             onClick={() => handleTypeChange(type.id)}
             className={`flex flex-col items-center p-4 rounded-2xl border-2 transition-all duration-200 ${
               formData.tipePerjalanan === type.id
-                ? 'border-blue-600 bg-blue-50 text-blue-600 shadow-md'
-                : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200'
+                ? 'border-blue-400 bg-white/90 text-blue-600 shadow-xl shadow-blue-500/10 backdrop-blur-2xl'
+                : 'border-white/40 bg-white/70 backdrop-blur-xl text-gray-500 shadow-lg shadow-black/5 hover:border-blue-400/50 hover:bg-white/80 hover:shadow-xl hover:shadow-blue-500/10'
             }`}
           >
-            <div className={`p-3 rounded-full mb-2 ${formData.tipePerjalanan === type.id ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
+            <div className={`p-3 rounded-full mb-2 ${formData.tipePerjalanan === type.id ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/25 text-white' : 'bg-gray-100'}`}>
               {type.icon}
             </div>
             <span className="font-bold text-sm">{type.label}</span>
@@ -47,7 +47,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                   value={formData.moodPerjalanan}
                   onChange={(e) => setFormData({...formData, moodPerjalanan: e.target.value})}
                   placeholder="Contoh: Healing / Backpacker"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
                 />
              </div>
              <div className="flex items-center gap-2 mt-6">
@@ -73,7 +73,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                   value={formData.namaGrup}
                   onChange={(e) => setFormData({...formData, namaGrup: e.target.value})}
                   placeholder="Contoh: Pendaki Santuy"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
                 />
               </div>
               <div>
@@ -83,7 +83,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                   value={formData.temaGrup}
                   onChange={(e) => setFormData({...formData, temaGrup: e.target.value})}
                   placeholder="Contoh: Liburan Akhir Tahun"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
                 />
               </div>
             </div>
@@ -94,7 +94,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                 min="2"
                 value={formData.jumlahPeserta}
                 onChange={(e) => setFormData({...formData, jumlahPeserta: parseInt(e.target.value)})}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
               />
             </div>
           </div>
@@ -110,7 +110,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                     min="1"
                     value={formData.jumlahDewasa}
                     onChange={(e) => setFormData({...formData, jumlahDewasa: parseInt(e.target.value)})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
                   />
                </div>
                <div>
@@ -120,7 +120,7 @@ const TripTypeSelector = ({ formData, setFormData }) => {
                     min="0"
                     value={formData.jumlahAnak}
                     onChange={(e) => setFormData({...formData, jumlahAnak: parseInt(e.target.value)})}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition"
                   />
                </div>
             </div>

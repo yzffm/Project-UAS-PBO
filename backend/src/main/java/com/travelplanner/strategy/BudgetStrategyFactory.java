@@ -1,5 +1,8 @@
 package com.travelplanner.strategy;
 
+import com.travelplanner.model.base.Perjalanan;
+import com.travelplanner.model.perjalanan.PerjalananGrup;
+import com.travelplanner.model.perjalanan.PerjalananKeluarga;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,13 +26,14 @@ public class BudgetStrategyFactory {
         this.keluargaStrategy = keluargaStrategy;
     }
 
-    public BudgetStrategy selectStrategy(String tipePerjalanan) {
-        if (tipePerjalanan == null) return standardStrategy;
+    public BudgetStrategy selectStrategy(Perjalanan perjalanan) {
+        if (perjalanan == null) return standardStrategy;
 
-        return switch (tipePerjalanan.toUpperCase()) {
-            case "GRUP" -> grupStrategy;
-            case "KELUARGA" -> keluargaStrategy;
-            default -> standardStrategy; // SOLO and any unknown type
-        };
+        if (perjalanan instanceof PerjalananGrup) {
+            return grupStrategy;
+        } else if (perjalanan instanceof PerjalananKeluarga) {
+            return keluargaStrategy;
+        }
+        return standardStrategy;
     }
 }

@@ -88,13 +88,15 @@ public class AnggaranService {
      * Generates a budget summary using the Strategy Pattern.
      * The strategy is selected based on the trip type (SOLO/GRUP/KELUARGA).
      */
-    public BudgetSummaryResponseDTO getBudgetSummary(Long tripId, String tipePerjalanan) {
+    public BudgetSummaryResponseDTO getBudgetSummary(Long tripId) {
 
         // FIX 1: Ambil objek Perjalanan dari database (MENGHILANGKAN ERROR MERAH)
         Perjalanan perjalanan = perjalananService.getTripEntityById(tripId);
 
         List<AnggaranItem> items = anggaranRepository.findByPerjalananId(tripId);
-        BudgetStrategy strategy = budgetStrategyFactory.selectStrategy(tipePerjalanan);
+        
+        // Pass the actual Perjalanan entity to the factory so it can use instanceof
+        BudgetStrategy strategy = budgetStrategyFactory.selectStrategy(perjalanan);
 
         // Objek 'perjalanan' sekarang sudah ada, error merah akan hilang!
         Double totalEstimasi = strategy.hitungTotalEstimasi(items, perjalanan);

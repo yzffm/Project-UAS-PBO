@@ -81,7 +81,7 @@ const CreateTripPage = () => {
         ← Kembali ke Dashboard
       </button>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+      <div className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg shadow-black/5 rounded-3xl p-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Buat Rencana Baru</h1>
         <p className="text-gray-500 mb-8">Lengkapi detail di bawah untuk memulai perencanaan petualangan Anda.</p>
 
@@ -98,19 +98,19 @@ const CreateTripPage = () => {
               <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Perjalanan *</label>
               <input type="text" required value={formData.namaTrip} onChange={(e) => setFormData({ ...formData, namaTrip: e.target.value })}
                 placeholder="Contoh: Liburan Musim Panas di Bali"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Tanggal Mulai *</label>
                 <input type="date" required value={formData.tanggalMulai} onChange={(e) => setFormData({ ...formData, tanggalMulai: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-700" />
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition text-gray-700" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Tanggal Selesai *</label>
                 <input type="date" required value={formData.tanggalSelesai} onChange={(e) => setFormData({ ...formData, tanggalSelesai: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-gray-700" />
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition text-gray-700" />
               </div>
             </div>
 
@@ -118,7 +118,7 @@ const CreateTripPage = () => {
               <label className="block text-sm font-semibold text-gray-700 mb-1">Deskripsi Singkat</label>
               <textarea rows="3" value={formData.deskripsiTrip} onChange={(e) => setFormData({ ...formData, deskripsiTrip: e.target.value })}
                 placeholder="Tujuan, harapan, atau catatan untuk trip ini..."
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition resize-none"></textarea>
+                className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 outline-none transition resize-none"></textarea>
             </div>
           </section>
 
@@ -126,7 +126,7 @@ const CreateTripPage = () => {
             <TripTypeSelector formData={formData} setFormData={setFormData} />
           </section>
 
-          <button type="submit" disabled={isLoading} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-200 disabled:opacity-70 mt-8">
+          <button type="submit" disabled={isLoading} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-lg shadow-blue-500/25 disabled:opacity-70 mt-8">
             {isLoading ? 'Menyimpan...' : 'Buat Rencana Perjalanan →'}
           </button>
         </form>

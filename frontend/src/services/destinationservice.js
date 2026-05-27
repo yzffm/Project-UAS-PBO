@@ -36,7 +36,7 @@ const destinationService = {
   },
   searchDestinations: async (query, token) => {
     try {
-      const response = await axios.get(`${API_URL}/destinasi/search?q=${query}`, getHeaders(token));
+      const response = await axios.get(`${API_URL}/destinasi?q=${query}`, getHeaders(token));
       return response.data;
     } catch (error) {
       throw error.response?.data?.message || error.message || 'Failed to search destinations';

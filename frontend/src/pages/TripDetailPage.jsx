@@ -118,26 +118,29 @@ const TripDetailPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="app-bg min-h-screen pb-12 relative z-10">
       {/* Header Banner */}
-      <div className="bg-blue-600 text-white pt-6 pb-20 px-6">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white pt-6 pb-20 px-6 shadow-lg shadow-blue-500/20">
         <div className="max-w-5xl mx-auto">
           {/* BAGIAN YANG DIPERBAIKI: Penambahan Tombol Edit & Delete di sejajar tombol kembali */}
           <div className="flex justify-between items-center mb-6">
-            <Link to="/dashboard" className="inline-flex items-center gap-2 text-blue-100 hover:text-white transition">
-              <ArrowLeft className="h-4 w-4" /> Kembali ke Dashboard
+            <Link to="/dashboard" className="inline-flex items-center gap-2 text-blue-100 hover:text-white transition group">
+              <span className="p-1 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                <ArrowLeft className="h-4 w-4" /> 
+              </span>
+              Kembali ke Dashboard
             </Link>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setShowEditTrip(true)}
-                className="inline-flex items-center gap-2 bg-white/20 text-white hover:bg-white/30 px-4 py-2 rounded-xl transition text-sm font-bold border border-white/30 backdrop-blur-sm shadow-sm"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl transition text-sm font-bold border border-white/20 backdrop-blur-md shadow-sm"
               >
                 <Edit3 className="h-4 w-4" /> Edit Trip
               </button>
               <button
                 onClick={handleDeleteTrip}
-                className="inline-flex items-center gap-2 bg-red-500/20 text-red-50 hover:bg-red-500 hover:text-white px-4 py-2 rounded-xl transition text-sm font-bold border border-red-400/30 backdrop-blur-sm shadow-sm"
+                className="inline-flex items-center gap-2 bg-red-500/20 hover:bg-red-500 text-red-50 hover:text-white px-4 py-2 rounded-xl transition text-sm font-bold border border-red-400/30 backdrop-blur-md shadow-sm"
               >
                 <Trash2 className="h-4 w-4" /> Hapus Trip
               </button>
@@ -166,24 +169,24 @@ const TripDetailPage = () => {
       {/* Konten Utama */}
       <div className="max-w-5xl mx-auto px-6 -mt-10">
         {/* Navigasi Tab */}
-        <div className="flex bg-white p-1 rounded-xl shadow-md mb-8 border border-gray-100">
+        <div className="flex glass-card p-1 rounded-xl shadow-lg shadow-blue-900/5 mb-8">
           <button
             onClick={() => setActiveTab('itinerary')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${activeTab === 'itinerary' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600'
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'itinerary' ? 'bg-blue-600/90 backdrop-blur-sm text-white shadow-md shadow-blue-500/25' : 'text-gray-500 hover:bg-white/50 hover:text-blue-600'
               }`}
           >
             <CalendarDays className="h-5 w-5" /> Itinerary
           </button>
           <button
             onClick={() => setActiveTab('budget')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${activeTab === 'budget' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600'
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'budget' ? 'bg-blue-600/90 backdrop-blur-sm text-white shadow-md shadow-blue-500/25' : 'text-gray-500 hover:bg-white/50 hover:text-blue-600'
               }`}
           >
             <Banknote className="h-5 w-5" /> Budget Items
           </button>
           <button
             onClick={() => setActiveTab('summary')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${activeTab === 'summary' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600'
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'summary' ? 'bg-blue-600/90 backdrop-blur-sm text-white shadow-md shadow-blue-500/25' : 'text-gray-500 hover:bg-white/50 hover:text-blue-600'
               }`}
           >
             <BarChart3 className="h-5 w-5" /> Budget Summary
@@ -194,7 +197,7 @@ const TripDetailPage = () => {
         <div className="transition-all duration-300">
           {activeTab === 'itinerary' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="flex justify-between items-center glass-card p-6 rounded-2xl">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">Rencana Perjalanan</h2>
                   <p className="text-gray-500 text-sm mt-1">Susun jadwal harian Anda di sini.</p>
@@ -203,8 +206,8 @@ const TripDetailPage = () => {
                   onClick={handleAddDay}
                   disabled={days.length >= tripData.durasiHari}
                   className={`px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm ${days.length >= tripData.durasiHari
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                    ? 'bg-gray-100/50 text-gray-400 cursor-not-allowed border border-gray-200/50'
+                    : 'bg-blue-50/80 text-blue-600 hover:bg-blue-100 border border-blue-100/50'
                     }`}
                   title={days.length >= tripData.durasiHari ? "Kuota hari sudah maksimal" : "Tambah jadwal hari"}
                 >
@@ -213,7 +216,7 @@ const TripDetailPage = () => {
               </div>
 
               {days.length === 0 ? (
-                <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
+                <div className="text-center py-12 glass-card rounded-2xl border-dashed border-2">
                   <p className="text-gray-500">Belum ada hari yang ditambahkan.</p>
                 </div>
               ) : (
@@ -231,20 +234,20 @@ const TripDetailPage = () => {
 
           {activeTab === 'budget' && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <div className="flex justify-between items-center glass-card p-6 rounded-2xl">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">Manajemen Anggaran</h2>
                   <p className="text-gray-500 text-sm mt-1">Catat semua pengeluaran selama perjalanan.</p>
                 </div>
                 <button
                   onClick={() => { setEditingBudgetItem(null); setShowBudgetForm(true); }}
-                  className="bg-green-50 text-green-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-green-100 transition shadow-sm"
+                  className="bg-green-50/80 text-green-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-green-100/80 transition border border-green-200/50 shadow-sm"
                 >
                   + Tambah Item
                 </button>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="glass-card rounded-2xl overflow-hidden">
                 <BudgetTable
                   items={budgetItems}
                   onEdit={(item) => { setEditingBudgetItem(item); setShowBudgetForm(true); }}
@@ -273,40 +276,40 @@ const TripDetailPage = () => {
               {budgetSummary ? (
                 <BudgetSummaryChart summary={budgetSummary} />
               ) : (
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center">
+                <div className="glass-card p-6 rounded-2xl flex items-center justify-center">
                   <p className="text-gray-500">Data summary belum tersedia</p>
                 </div>
               )}
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Status Anggaran</h3>
+              <div className="glass-card p-6 rounded-2xl">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">Status Anggaran</h3>
                 {budgetSummary && (
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <div className="flex justify-between items-center p-3 bg-gray-50/50 rounded-xl border border-gray-100">
                       <span className="text-gray-600 font-medium">Estimasi</span>
                       <span className="font-bold">Rp {budgetSummary.totalEstimasi?.toLocaleString('id-ID')}</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <div className="flex justify-between items-center p-3 bg-gray-50/50 rounded-xl border border-gray-100">
                       <span className="text-gray-600 font-medium">Aktual (Total)</span>
                       <span className="font-bold">Rp {budgetSummary.totalAktual?.toLocaleString('id-ID')}</span>
                     </div>
 
                     {(tripData?.tipePerjalanan === 'Group Trip' || tripData?.tipePerjalanan === 'Family Trip') && (
-                      <div className="flex justify-between items-center p-3 bg-blue-50 border border-blue-100 rounded-xl shadow-sm">
+                      <div className="flex justify-between items-center p-3 bg-blue-50/80 border border-blue-100/50 rounded-xl shadow-sm">
                         <span className="text-blue-800 font-bold">Total Bayar (Per Orang)</span>
                         <span className="font-extrabold text-blue-700">
-                          Rp {Math.round((budgetSummary.totalAktual || 0) / (tripData?.jumlahPeserta || tripData?.jumlahDewasa || 1)).toLocaleString('id-ID')}
+                          Rp {Math.round((budgetSummary.totalAktual || 0) / (tripData?.tipePerjalanan === 'Family Trip' ? (tripData?.jumlahDewasa || 1) : (tripData?.jumlahPeserta || 1))).toLocaleString('id-ID')}
                         </span>
                       </div>
                     )}
 
-                    <div className={`flex justify-between items-center p-4 rounded-xl font-bold ${budgetSummary.statusBudget === 'OVER_BUDGET' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+                    <div className={`flex justify-between items-center p-4 rounded-xl font-bold backdrop-blur-sm border ${budgetSummary.statusBudget === 'OVER_BUDGET' ? 'bg-red-50/80 text-red-600 border-red-200/50' : 'bg-green-50/80 text-green-600 border-green-200/50'
                       }`}>
                       <span>Selisih</span>
                       <span>Rp {Math.abs(budgetSummary.selisih || 0).toLocaleString('id-ID')}</span>
                     </div>
-                    <div className="mt-4 p-4 border border-blue-100 bg-blue-50 rounded-xl text-blue-800 text-sm">
-                      <p className="mb-1"><strong>Tipe Perjalanan:</strong> {tripData?.tipePerjalanan}. <strong>Kelas Anggaran:</strong> {tripData?.kelasAnggaran}.</p>
+                    <div className="mt-4 p-4 border border-blue-100/50 bg-blue-50/80 backdrop-blur-sm rounded-xl text-blue-800 text-sm">
+                      <p className="mb-1"><strong>Tipe Perjalanan:</strong> {tripData?.tipePerjalanan}.</p>
                       {(tripData?.tipePerjalanan === 'Group Trip' || tripData?.tipePerjalanan === 'Family Trip') && (
                         <p className="text-xs text-blue-600 mt-2 font-medium">
                           * Karena ini adalah perjalanan Grup/Keluarga, sistem otomatis menghitung <b>Total Bayar (Per Orang)</b> dengan membagi total pengeluaran aktual dengan jumlah {tripData?.tipePerjalanan === 'Family Trip' ? `Orang Dewasa (${tripData?.jumlahDewasa || 1} orang)` : `Peserta (${tripData?.jumlahPeserta || 1} orang)`}.

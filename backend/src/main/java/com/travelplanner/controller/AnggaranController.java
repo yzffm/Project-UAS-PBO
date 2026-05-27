@@ -59,8 +59,7 @@ public class AnggaranController {
 
     @GetMapping("/summary")
     public ResponseEntity<BudgetSummaryResponseDTO> getBudgetSummary(
-            @PathVariable Long tripId,
-            @RequestParam(defaultValue = "SOLO") String tipePerjalanan) {
-        return ResponseEntity.ok(anggaranService.getBudgetSummary(tripId, tipePerjalanan));
+            @PathVariable Long tripId) {
+        return ResponseEntity.ok(anggaranService.getBudgetSummary(tripId));
     }
 }

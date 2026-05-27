@@ -16,11 +16,13 @@ const LoadingSpinner = ({ size = 'md', text = 'Memuat data...', fullPage = false
   };
 
   const containerClasses = fullPage 
-    ? "fixed inset-0 z-[99] flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm"
+    ? "fixed inset-0 z-[99] flex flex-col items-center justify-center bg-gray-900/40 backdrop-blur-md"
     : "flex flex-col items-center justify-center p-8 w-full";
 
   return (
     <div className={containerClasses}>
+      {fullPage && <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10"></div>}
+      <div className={`relative ${fullPage ? 'glass-card p-10 rounded-3xl flex flex-col items-center' : ''}`}>
       <div className="relative">
         {/* Ring Latar Belakang */}
         <div className={`${sizeClasses[size]} border-gray-100 rounded-full`}></div>
@@ -34,6 +36,7 @@ const LoadingSpinner = ({ size = 'md', text = 'Memuat data...', fullPage = false
           {text}
         </p>
       )}
+      </div>
     </div>
   );
 };

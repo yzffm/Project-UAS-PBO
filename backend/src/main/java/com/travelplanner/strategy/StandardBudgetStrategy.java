@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * Standard strategy for Solo trips.
- * Calculates standard base estimations with no special markups.
+ * Calculates standard base estimations.
  */
 @Component
 public class StandardBudgetStrategy implements BudgetStrategy {

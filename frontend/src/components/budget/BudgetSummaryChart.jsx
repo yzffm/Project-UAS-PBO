@@ -70,8 +70,8 @@ const BudgetSummaryChart = ({ summary }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
-      <h3 className="text-lg font-bold text-gray-900 mb-6 text-center w-full border-b pb-2">
+    <div className="glass-card p-6 rounded-2xl flex flex-col items-center">
+      <h3 className="text-lg font-bold text-gray-900 mb-6 text-center w-full border-b border-white/40 pb-2">
         Proporsi Estimasi Anggaran
       </h3>
 
@@ -79,7 +79,7 @@ const BudgetSummaryChart = ({ summary }) => {
         {estimasiValues.some(v => v > 0) ? (
           <Doughnut data={chartData} options={options} />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+          <div className="absolute inset-0 flex items-center justify-center border-2 border-dashed border-gray-200/60 rounded-xl bg-gray-50/50 backdrop-blur-sm">
             <p className="text-gray-400 font-medium">Belum ada data anggaran</p>
           </div>
         )}
@@ -87,14 +87,14 @@ const BudgetSummaryChart = ({ summary }) => {
 
       <div className="mt-8 w-full space-y-3">
         {categories.map((cat, index) => (
-          <div key={index} className="flex justify-between text-sm items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+          <div key={index} className="flex justify-between text-sm items-center p-2 rounded-lg hover:bg-white/40 transition-colors backdrop-blur-sm">
             <span className="text-gray-600 font-bold flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: chartData.datasets[0].borderColor[index] }}></span>
+              <span className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: chartData.datasets[0].borderColor[index] }}></span>
               {labels[index]}
             </span>
             <div className="text-right">
               <p className="font-bold text-gray-900">{formatCurrency(perKategori[cat].estimasi)}</p>
-              <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Aktual: {formatCurrency(perKategori[cat].aktual)}</p>
+              <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Aktual: <span className="text-gray-500">{formatCurrency(perKategori[cat].aktual)}</span></p>
             </div>
           </div>
         ))}

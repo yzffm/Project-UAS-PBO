@@ -56,7 +56,7 @@ const DashboardPage = () => {
           <h1 className="text-3xl font-bold text-gray-900">Dashboard Saya</h1>
           <p className="text-gray-500">Halo {user?.nama}, Anda memiliki {trips.length} rencana perjalanan.</p>
         </div>
-        <Link to="/trips/new" className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition flex items-center gap-2 shadow-md">
+        <Link to="/trips/new" className="bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/25 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition flex items-center gap-2">
           <span>+</span> Rencana Baru
         </Link>
       </header>
@@ -68,11 +68,11 @@ const DashboardPage = () => {
       )}
 
       {trips.length === 0 && !error ? (
-        <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-300">
+        <div className="text-center py-20 bg-white/70 backdrop-blur-xl border border-dashed border-gray-300 shadow-lg shadow-black/5 rounded-3xl">
           <div className="text-5xl mb-4">✈️</div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">Belum ada trip</h3>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">Mulai rencanakan petualangan pertama Anda dengan membuat rencana perjalanan baru.</p>
-          <Link to="/trips/new" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition">
+          <Link to="/trips/new" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/25 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition">
             Buat Trip Sekarang
           </Link>
         </div>
@@ -82,7 +82,7 @@ const DashboardPage = () => {
             <TripCard key={trip.id} trip={trip} />
           ))}
           {/* Card Kosong untuk pemicu buat baru */}
-          <Link to="/trips/new" className="border-2 border-dashed border-gray-300 bg-white rounded-2xl flex flex-col items-center justify-center p-10 text-gray-400 hover:border-blue-400 hover:text-blue-500 transition hover:shadow-md">
+          <Link to="/trips/new" className="border-2 border-dashed border-gray-300 bg-white/50 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-10 text-gray-400 hover:border-blue-400 hover:text-blue-500 transition hover:shadow-md">
             <span className="text-4xl mb-2">+</span>
             <p className="font-medium">Tambah Rencana Baru</p>
           </Link>

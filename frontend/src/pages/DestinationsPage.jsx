@@ -52,21 +52,22 @@ const DestinationsPage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+  <div className="app-bg min-h-screen">
+    <div className="max-w-7xl mx-auto px-6 py-10 relative z-10">
       {/* Header Section */}
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Eksplorasi Destinasi</h1>
-        <p className="text-gray-500 max-w-2xl mx-auto text-lg">Temukan keindahan alam, kekayaan budaya, dan cita rasa kuliner untuk petualangan Anda selanjutnya.</p>
+        <p className="text-gray-600 max-w-2xl mx-auto text-lg font-medium">Temukan keindahan alam, kekayaan budaya, dan cita rasa kuliner untuk petualangan Anda selanjutnya.</p>
       </div>
 
       {/* Filter & Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 mb-10">
         <div className="relative flex-1">
-          <Search className="h-5 w-5 absolute left-4 top-4 text-gray-400" />
+          <Search className="h-5 w-5 absolute left-4 top-4 text-blue-400" />
           <input
             type="text"
             placeholder="Cari destinasi..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white rounded-2xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all shadow-sm"
+            className="w-full pl-12 pr-4 py-3.5 glass-input rounded-2xl shadow-sm"
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
           />
@@ -80,8 +81,8 @@ const DestinationsPage = () => {
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
                 className={`px-6 py-3.5 rounded-2xl font-bold whitespace-nowrap transition-all ${isSelected
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
-                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25'
+                  : 'btn-secondary'
                   }`}
               >
                 {cat}
@@ -95,34 +96,34 @@ const DestinationsPage = () => {
       {loading ? (
         <LoadingSpinner />
       ) : error ? (
-        <div className="text-center py-20 text-red-600 font-medium bg-red-50 rounded-3xl">{error}</div>
+        <div className="text-center py-20 text-red-600 font-medium bg-red-50/80 backdrop-blur-sm rounded-3xl border border-red-100">{error}</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
           {destinations.map(dest => (
-            <div key={dest.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
-              <div className="relative h-56 overflow-hidden bg-gray-100">
+            <div key={dest.id} className="glass-card glass-card-hover rounded-3xl overflow-hidden group flex flex-col">
+              <div className="relative h-56 overflow-hidden bg-gray-100/50">
                 <img
                   src={dest.gambarUrl || 'https://via.placeholder.com/400x300?text=No+Image'}
                   alt={dest.nama}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black tracking-widest text-blue-600 shadow-sm border border-white/20">
+                <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black tracking-widest text-blue-600 shadow-sm border border-white/50">
                   {dest.kategori}
                 </div>
               </div>
 
               <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-1.5 text-gray-400 text-xs font-semibold uppercase tracking-wider mb-3">
-                  <MapPin className="h-4 w-4" />
+                <div className="flex items-center gap-1.5 text-gray-500 text-xs font-semibold uppercase tracking-wider mb-3">
+                  <MapPin className="h-4 w-4 text-blue-400" />
                   <span className="truncate">{dest.lokasi}</span>
                 </div>
-                <h3 className="font-extrabold text-gray-900 text-xl mb-2 line-clamp-1">{dest.nama}</h3>
+                <h3 className="font-extrabold text-gray-900 text-xl mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">{dest.nama}</h3>
                 <p className="text-green-600 font-black text-lg mb-6">
                   {formatCurrency(dest.estimasiBiaya)}
                 </p>
 
                 <div className="mt-auto">
-                  <Link to={`/destinations/${dest.id}`} className="block w-full py-3 text-center bg-gray-50 text-gray-800 rounded-xl text-sm font-bold hover:bg-blue-600 hover:text-white transition-colors duration-300">
+                  <Link to={`/destinations/${dest.id}`} className="block w-full py-3 text-center btn-secondary hover:bg-blue-600 hover:text-white rounded-xl text-sm font-bold transition-all duration-300">
                     Lihat Detail
                   </Link>
                 </div>
@@ -134,13 +135,14 @@ const DestinationsPage = () => {
 
       {/* Empty State */}
       {!loading && !error && destinations.length === 0 && (
-        <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300">
+        <div className="text-center py-24 glass-card rounded-3xl border-dashed border-2">
           <div className="text-5xl mb-4 text-gray-300">🔍</div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">Tidak ditemukan</h3>
           <p className="text-gray-500">Destinasi tidak ditemukan. Coba gunakan kata kunci lain atau ubah filter kategori.</p>
         </div>
       )}
     </div>
+  </div>
   );
 };
 
