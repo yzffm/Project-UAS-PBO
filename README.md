@@ -513,6 +513,6 @@ Project ini dibuat untuk keperluan akademik mata kuliah **Pemrograman Berorienta
 
 <div align="center">
 
-Dibuat dengan ❤️ oleh Kelompok PBO 2025 · UNESA
+Dibuat dengan ❤️ oleh Kelompok 1 · Informatika 2025 I · UNESA
 
 </div>
