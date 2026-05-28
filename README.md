@@ -69,7 +69,6 @@ Project ini dibangun dengan arsitektur **MVC (Model-View-Controller)** dan mener
 | PostgreSQL | 15.x | Database (hosted di Supabase) |
 | JJWT | 0.12.6 | JSON Web Token untuk autentikasi |
 | Maven | 3.x | Build tool & dependency management |
-| Lombok | Latest | Boilerplate reduction |
 
 ### Frontend
 | Teknologi | Versi | Fungsi |
@@ -81,7 +80,6 @@ Project ini dibangun dengan arsitektur **MVC (Model-View-Controller)** dan mener
 | React Router DOM | 6.26.1 | Client-side routing |
 | Recharts / Chart.js | Latest | Visualisasi data budget |
 | Lucide React | 0.438.0 | Icon library |
-| Headless UI | 2.2.10 | Komponen UI aksesibel |
 
 ---
 
