@@ -494,7 +494,7 @@ VITE_API_BASE_URL=http://localhost:8080/api
 
 Laporan lengkap Tugas UAS tersedia di:
 
-📥 **[`docs/Laporan-UAS-PBO-Kelompok-1_TravelPlanner.pdf`](./docs/Laporan-UAS-PBO-Kelompok-1_TravelPlanner.pdf)**
+📥 **[`docs/Laporan%20UAS%20PBO%20Kelompok%201_TravelPlanner.pdf`](./docs/Laporan-UAS-PBO-Kelompok-1_TravelPlanner.pdf)**
 
 Laporan mencakup:
 - BAB 1: Pendahuluan (Latar Belakang, Rumusan Masalah, Tujuan)
