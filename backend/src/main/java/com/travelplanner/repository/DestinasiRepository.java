@@ -1,4 +1,4 @@
-// 1. Deklarasi package sesuai folder di screenshot-mu
+
 package com.travelplanner.repository;
 
 // 2. Import class yang dibutuhkan biar gak "cannot find symbol"
